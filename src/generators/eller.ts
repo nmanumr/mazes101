@@ -12,7 +12,7 @@ interface BoardFunctions<Board extends BaseBoard> {
   /** remove walls between given two cell indexes */
   removeInterWall(index1: number, index2: number, board: Board): Board;
   /** get cell neighbour from next row */
-  getNextRowNeighbours?(index: number, board: Board): number[];
+  getNextRowNeighbours(index: number, board: Board): number[];
 }
 
 /*---------------

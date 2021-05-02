@@ -21,7 +21,7 @@ interface BoardFunctions<Board extends BaseBoard> {
    * greater the number longer the vertical passages
    * shorter the number longer the horizontal passages
    */
-  getFactor(rowIndex: number): number;
+  getFactor?(rowIndex: number): number;
 }
 
 /*---------------
