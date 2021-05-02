@@ -4,8 +4,6 @@ Utilities to generate, render and hack with any sort of mazes.
 
 ## Installation
 
-**NOTE:** package not published yet
-
 ```sh
 npm i mazes101 --save
 ```
