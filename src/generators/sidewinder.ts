@@ -14,7 +14,19 @@ interface BoardFunctions<Board extends BaseBoard> {
 
   /** get cell neighbour */
   getNeighbours(index: number, board: Board): number[];
+
+  /**
+   * should return a number between 0 - 1
+   * default is 0.5
+   * greater the number longer the vertical passages
+   * shorter the number longer the horizontal passages
+   */
+  getFactor(rowIndex: number): number;
 }
+
+/*---------------
+ * Main function
+ *--------------- */
 
 /**
  * Generates maze using sidewinder maze generation Algorithm
@@ -24,6 +36,10 @@ interface BoardFunctions<Board extends BaseBoard> {
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
   let rows = fns.getRows(board);
 
+  if (!fns.getFactor) {
+    fns.getFactor = () => 0.5;
+  }
+
   for (let i = 1; i < rows[0].length; i++) {
     board = fns.removeInterWall(rows[0][i], rows[0][i - 1], board);
   }
@@ -32,7 +48,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
     let joinedCells = 0;
 
     for (let cellIndex = 1; cellIndex < rows[rowIndex].length; cellIndex++) {
-      if (Math.random() > .5) {
+      if (Math.random() > fns.getFactor(rowIndex)) {
         board = fns.removeInterWall(rows[rowIndex][cellIndex - 1], rows[rowIndex][cellIndex], board);
         joinedCells++;
       } else {
