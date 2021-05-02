@@ -27,6 +27,9 @@ import {render} from 'mazes101/renderers/rectangularSvg';
 const svgString = render(board);
 ```
 
+Code in completely purgeable so only the bits that your are using will be bundled. For example, the following code
+bundles to only 3KBs.
+
 ## Contributions
 If you feel something is missing or something can be done better
 feel free to open an issue or direct create a PR for that. Following
