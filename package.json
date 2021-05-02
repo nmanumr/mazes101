@@ -1,0 +1,25 @@
+{
+  "name": "mazes101",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmanumr/mazes101.git"
+  },
+  "keywords": [],
+  "author": "nmanumr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nmanumr/mazes101/issues"
+  },
+  "homepage": "https://github.com/nmanumr/mazes101#readme",
+  "devDependencies": {
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.4"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2019",
+    "lib": [
+      "ES2019",
+      "dom"
+    ]
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
