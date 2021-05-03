@@ -1,5 +1,6 @@
-import {BaseBoard} from "../base";
-import {getRandomIndexFrom} from "../utils";
+import {BaseBoard} from "../base.js";
+import {getRandomIndexFrom} from "../utils.js";
+import { keys } from 'ts-transformer-keys';
 
 /*--------------
  * Types
@@ -18,6 +19,8 @@ interface BoardFunctions<Board extends BaseBoard> {
     until: (position: number, path: number[]) => boolean
   ): number[]
 }
+
+export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 
 /*---------------
  * Main function

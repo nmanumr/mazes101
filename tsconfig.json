@@ -5,6 +5,9 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "target": "ES2019",
+    "plugins": [
+      { "transform": "ts-transformer-keys/transformer" }
+    ],
     "lib": [
       "ES2019",
       "dom"

@@ -1,4 +1,5 @@
-import {Direction, RectangularBoard, toPosition} from "../boards/rectangular";
+import {Direction, RectangularBoard, toPosition} from "../boards/rectangular.js";
+import {BoardType} from "../base.js";
 
 interface RendererOptions {
   cellSize: number;
@@ -42,3 +43,5 @@ export function render(board: RectangularBoard, options: Partial<RendererOptions
     <path d="${path}" stroke-width="${options.lineWidth}" stroke-linecap="round"/>
   </svg>`;
 }
+
+export const _supported_boards = [BoardType.Rectangular];

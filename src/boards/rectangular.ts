@@ -1,5 +1,6 @@
-import {BaseBoard, hasInterWall, isEnabled, setInterWallValue} from "../base";
+import {BaseBoard, hasInterWall, isEnabled, setInterWallValue} from "../base.js";
 import {PartialExcept} from "../types";
+import {keys} from "ts-transformer-keys";
 
 /*--------------
  * Types
@@ -26,6 +27,8 @@ export interface RectangularBoard extends BaseBoard {
   size: Size;
 }
 
+export const _size_params = keys<Size>();
+
 /*-------------------------
  * Constructor Functions
  *------------------------- */
@@ -33,7 +36,7 @@ export interface RectangularBoard extends BaseBoard {
 /**
  * Returns a new rectangularBoard for the given size
  */
-export function rectangularBoard(size: Size): RectangularBoard {
+export function newBoard(size: Size): RectangularBoard {
   return {
     cells: new Uint8Array(size.width * size.height),
     size,
@@ -43,7 +46,7 @@ export function rectangularBoard(size: Size): RectangularBoard {
 /**
  * Casts base board to RectangularBoard
  */
-export function rectangularFromBaseBoard({cells}: BaseBoard, size: Size): RectangularBoard {
+export function newFromBaseBoard({cells}: BaseBoard, size: Size): RectangularBoard {
   return {cells: cells, size}
 }
 
@@ -246,7 +249,7 @@ export function getNextRowNeighbours(index: number, {size}: RectangularBoard): n
 /**
  * Remove wall between the given two cell Indexes
  */
-function removeInterWall(index1: number, index2: number, board: RectangularBoard): RectangularBoard {
+export function removeInterWall(index1: number, index2: number, board: RectangularBoard): RectangularBoard {
   return setInterWallValue<RectangularBoard, Direction>(
     index1, index2, board,
     getOpposingDirection,
@@ -258,7 +261,7 @@ function removeInterWall(index1: number, index2: number, board: RectangularBoard
 /**
  * Set wall between the given two cell positions
  */
-function setInterWall(index1: number, index2: number, board: RectangularBoard): RectangularBoard {
+export function setInterWall(index1: number, index2: number, board: RectangularBoard): RectangularBoard {
   return setInterWallValue<RectangularBoard, Direction>(
     index1, index2, board,
     getOpposingDirection,

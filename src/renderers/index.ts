@@ -1,5 +1,5 @@
-import * as circularSvg from './circularSvg';
-import * as rectangularSvg from './rectangularSvg';
+import * as circularSvg from './circularSvg.js';
+import * as rectangularSvg from './rectangularSvg.js';
 
 export default {
   circularSvg, rectangularSvg

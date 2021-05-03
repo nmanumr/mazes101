@@ -1,9 +1,10 @@
+import {BaseBoard, setInterWallValue} from "../base.js";
+import {PartialExcept} from "../types";
+import {keys} from "ts-transformer-keys";
+
 /*--------------
  * Types
  *-------------- */
-
-import {BaseBoard, setInterWallValue} from "../base";
-import {PartialExcept} from "../types";
 
 // default top direction is clock wise
 export enum Direction {
@@ -28,6 +29,8 @@ export interface CircularBoard extends BaseBoard {
   size: Size;
 }
 
+export const _size_params = keys<Size>();
+
 function sum(nums: number[]) {
   return Array.from(nums).reduce((s, i) => s + i, 0);
 }
@@ -39,7 +42,8 @@ function sum(nums: number[]) {
 /**
  * Returns a new CircularBoard for the given size
  */
-export function circularBoard(radius: number, innerRadius: number = 3): CircularBoard {
+export function newBoard({radius, innerRadius}: {radius: number, innerRadius: number}): CircularBoard {
+  if (!innerRadius) innerRadius = 3;
   const nodeCount = getRingNodeCount(radius);
   const totalNodes = sum(nodeCount.slice(innerRadius));
 
@@ -52,7 +56,7 @@ export function circularBoard(radius: number, innerRadius: number = 3): Circular
 /**
  * Casts base board to RectangularBoard
  */
-export function circularFromBaseBoard({cells}: BaseBoard, size: Size): CircularBoard {
+export function newFromBaseBoard({cells}: BaseBoard, size: Size): CircularBoard {
   return {cells: cells, size}
 }
 

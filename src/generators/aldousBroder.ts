@@ -1,5 +1,6 @@
-import {BaseBoard} from "../base";
-import {getRandomIndexFrom} from "../utils";
+import {BaseBoard} from "../base.js";
+import {getRandomIndexFrom} from "../utils.js";
+import {keys} from "ts-transformer-keys";
 
 /*--------------
  * Types
@@ -12,6 +13,8 @@ interface BoardFunctions<Board extends BaseBoard> {
   /** get cell neighbour */
   getNeighbours(index: number, board: Board): number[];
 }
+
+export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 
 /*---------------
  * Main function

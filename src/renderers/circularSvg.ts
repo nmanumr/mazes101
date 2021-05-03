@@ -1,5 +1,5 @@
-import {CircularBoard, Direction, getRows} from "../boards/circular";
-import {hasCellWall} from "../base";
+import {CircularBoard, Direction, getRows} from "../boards/circular.js";
+import {BoardType} from "../base.js";
 
 interface RendererOptions {
   cellSize: number;
@@ -58,3 +58,5 @@ export function render(board: CircularBoard, options: Partial<RendererOptions> =
     <path d="${path}" stroke-width="${options.lineWidth}" stroke-linecap="round"/>
   </svg>`;
 }
+
+export const _supported_boards = [BoardType.Circular];

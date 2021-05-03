@@ -1,5 +1,6 @@
-import {BaseBoard} from "../base";
-import {getRandomFrom, getRandomInt} from "../utils";
+import {BaseBoard} from "../base.js";
+import {getRandomFrom, getRandomInt} from "../utils.js";
+import {keys} from "ts-transformer-keys";
 
 /*--------------
  * Types
@@ -23,6 +24,8 @@ interface BoardFunctions<Board extends BaseBoard> {
    */
   getFactor?(rowIndex: number): number;
 }
+
+export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 
 /*---------------
  * Main function

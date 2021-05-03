@@ -1,6 +1,7 @@
-import {BaseBoard} from "../base";
-import {getRandomIndexFrom, getRandomFrom} from "../utils";
-import {isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
+import {BaseBoard} from "../base.js";
+import {getRandomIndexFrom, getRandomFrom} from "../utils.js";
+import {isFromSameSet, ItemSets, joinItemSets} from "./_pathSet.js";
+import {keys} from "ts-transformer-keys";
 
 /*--------------
  * Types
@@ -13,6 +14,8 @@ interface BoardFunctions<Board extends BaseBoard> {
   /** get cell neighbour */
   getNeighbours(index: number, board: Board): number[];
 }
+
+export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 
 
 /*---------------

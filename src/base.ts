@@ -15,6 +15,13 @@ export interface BaseBoard {
   cells: Uint8Array;
 }
 
+export const enum BoardType {
+  Rectangular="rectangular",
+  Circular="circular",
+  Triangular="triangular",
+  Hexagonal="hexagonal"
+}
+
 /**
  * Returns a new generic maze board of given size;
  */

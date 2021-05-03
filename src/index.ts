@@ -1,8 +1,8 @@
-import * as baseBoard from './base';
-import * as utils from './utils';
-import Boards from './boards';
-import Generators from './generators';
-import Renderers from './renderers';
+import * as baseBoard from './base.js';
+import * as utils from './utils.js';
+import Boards from './boards/index.js';
+import Generators from './generators/index.js';
+import Renderers from './renderers/index.js';
 
 export default {
   baseBoard,
