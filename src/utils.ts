@@ -15,6 +15,14 @@ export function shuffle<T>(array: T[]): T[] {
   return out;
 }
 
+export function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {
+  let _diff = new Set<T>(setA);
+  for (let elem of setB) {
+    _diff.delete(elem)
+  }
+  return _diff;
+}
+
 /**
  * returns a random element from given array
  */
