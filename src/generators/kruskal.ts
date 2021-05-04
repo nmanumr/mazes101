@@ -1,4 +1,4 @@
-import {BaseBoard} from "../base.js";
+import {BaseBoard, isEnabled} from "../base.js";
 import {getRandomIndexFrom, getRandomFrom} from "../utils.js";
 import {isFromSameSet, ItemSets, joinItemSets} from "./_pathSet.js";
 import {keys} from "ts-transformer-keys";
@@ -31,12 +31,16 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
   let pathSets: ItemSets<number> = [];
 
   for (let i = 0; i < board.cells.length; i++) {
+    if (!isEnabled(board.cells[i])) continue;
     pathSets.push(new Set([i]));
   }
 
+  // FIXME: if maze is disjoint by disabled cell it will stuck in infinite loop
   while (pathSets.length > 1) {
     const randomCell = getRandomIndexFrom(board.cells);
-    const neighbours = fns.getNeighbours(randomCell, board);
+    if (!isEnabled(board.cells[randomCell])) continue;
+
+    const neighbours = fns.getNeighbours(randomCell, board).filter((c) => isEnabled(board.cells[c]));
     const randomNeighbour = getRandomFrom(neighbours);
 
     if (isFromSameSet(randomCell, randomNeighbour, pathSets)) continue;
