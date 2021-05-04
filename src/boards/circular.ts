@@ -182,6 +182,46 @@ export function getRows({size}: CircularBoard): number[][] {
  * Cell Neighbourhood Utils
  *------------------------- */
 
+export function getNeighbours(index: number, {size}: CircularBoard) {
+  const nodeCount = getRingNodeCount(size.radius).slice(size.innerRadius);
+  const nodeCountSum = nodeCount
+    .reduce((acc, v) => {
+      acc.push(acc[acc.length - 1] + v);
+      return acc;
+    }, [0]);
+
+  const r = nodeCountSum.findIndex((val) => val > index) - 1;
+  const t = index - nodeCountSum[r];
+  let neighbours = [];
+
+  if (r < (size.radius - size.innerRadius - 1)) {
+    if (nodeCount[r] < nodeCount[r + 1]) {
+      const cellIndex = toIndex({r: r + 1, t: t * 2}, {size});
+      neighbours.push(cellIndex);
+      neighbours.push(cellIndex + 1);
+    } else {
+      const cellIndex = toIndex({r: r + 1, t}, {size});
+      neighbours.push(cellIndex);
+    }
+  }
+  // RIGHT
+  if (t > 0) { neighbours.push(index - 1); }
+  // BOTTOM
+  if (r > 0) {
+    let cellIndex;
+    if (nodeCount[r] > nodeCount[r - 1]) {
+      cellIndex = toIndex({r: r - 1, t: Math.floor(t / 2)}, {size});
+    } else {
+      cellIndex =  toIndex({r: r - 1, t}, {size});
+    }
+    neighbours.push(cellIndex);
+  }
+  // LEFT
+  if (t < nodeCount[r] - 1) { neighbours.push(index + 1); }
+
+  return neighbours;
+}
+
 /*-------------------------
  * Cell Wall Utils
  *------------------------- */
@@ -196,27 +236,4 @@ export function removeInterWall(index1: number, index2: number, board: CircularB
     getRelativeDirection,
     (cell, dir) => cell | dir
   )
-}
-
-/**
- * Get neighbours of current cell in next row
- */
-export function getNextRowNeighbours(index: number, {size}: CircularBoard): number[] {
-  const nodeCount = getRingNodeCount(size.radius).slice(size.innerRadius);
-  const nodeCountSum = nodeCount
-    .reduce((acc, v) => {
-      acc.push(acc[acc.length - 1] + v);
-      return acc;
-    }, [0]);
-
-  const r = nodeCountSum.findIndex((val) => val > index) - 1;
-  const t = index - nodeCountSum[r];
-
-  if (nodeCount[r] < nodeCount[r + 1]) {
-    const cellIndex = toIndex({r: r + 1, t: t * 2}, {size});
-    return [cellIndex, cellIndex + 1];
-  }
-
-  const cellIndex = toIndex({r: r + 1, t}, {size});
-  return [cellIndex];
 }

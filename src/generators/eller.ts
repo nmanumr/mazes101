@@ -10,10 +10,12 @@ import {keys} from "ts-transformer-keys";
 interface BoardFunctions<Board extends BaseBoard> {
   /** returns array of set of cell indexes in a row */
   getRows(board: Board): number[][];
+
   /** remove walls between given two cell indexes */
   removeInterWall(index1: number, index2: number, board: Board): Board;
-  /** get cell neighbour from next row */
-  getNextRowNeighbours(index: number, board: Board): number[];
+
+  /** get cell neighbour */
+  getNeighbours(index: number, board: Board): number[];
 }
 
 export const _required_fns = keys<BoardFunctions<BaseBoard>>();
@@ -36,9 +38,10 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
     pathSets.push(new Set([index]));
   }
 
-  for (let row of rows.slice(0, -1)) {
+  for (let i = 0; i < rows.length-1; i++) {
+    let row = rows[i];
     [board, pathSets] = visitRow(row, false, board, pathSets, fns);
-    [board, pathSets] = visitNextRow(row, board, pathSets, fns);
+    [board, pathSets] = visitNextRow(row, rows[i+1], board, pathSets, fns);
   }
 
   [board, pathSets] = visitRow(rows[rows.length - 1], true, board, pathSets, fns);
@@ -80,6 +83,7 @@ function visitRow<Board extends BaseBoard>(
 /** open passages between the cells of current row and the next row */
 function visitNextRow<Board extends BaseBoard>(
   row: number[],
+  nextRow: number[],
   board: Board,
   pathSets: ItemSets<number>,
   fns: BoardFunctions<Board>
@@ -91,7 +95,7 @@ function visitNextRow<Board extends BaseBoard>(
     let n = 1 + Math.round(Math.random() * (rowCells.length - 1));
     for (let i = 0; i < n; i++) {
       const cell = rowCells[i];
-      const nextRowCells = fns.getNextRowNeighbours(cell, board);
+      const nextRowCells = fns.getNeighbours(cell, board).filter((c) => nextRow.includes(c));
       const nextCell = getRandomFrom(nextRowCells);
 
       board = fns.removeInterWall(cell, nextCell, board);

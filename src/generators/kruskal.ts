@@ -30,8 +30,8 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
   let pathSets: ItemSets<number> = [];
 
-  for (let cell of board.cells) {
-    pathSets.push(new Set([cell]));
+  for (let i = 0; i < board.cells.length; i++) {
+    pathSets.push(new Set([i]));
   }
 
   while (pathSets.length > 1) {

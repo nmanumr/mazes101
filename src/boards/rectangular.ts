@@ -139,57 +139,22 @@ export function getRelativePosition({x, y}: Position, direction: Direction) {
 /**
  * Get neighbour cells of the given position
  */
-export function getNeighbourCells(position: Position, {cells, size}: RectangularBoard, visitableOnly = false) {
-  let neighbours = new Map<Direction, number>(),
-    index = toIndex(position, {size});
+export function getNeighbours(index: number, {cells, size}: RectangularBoard): number[] {
+  let neighboursCells = [];
 
-  if (index >= size.width) {
-    const cell = cells[index - size.width];
-    if (isEnabled(cell))
-      neighbours.set(Direction.TOP, cell);
-  }
+  // TOP
+  if (index >= size.width) { neighboursCells.push(index - size.width); }
 
-  if ((index + 1) % size.width != 0) {
-    const cell = cells[index + 1];
-    if (isEnabled(cell))
-      neighbours.set(Direction.RIGHT, cell);
-  }
+  // RIGHT
+  if ((index + 1) % size.width != 0) { neighboursCells.push(index + 1); }
 
-  if (index < cells.length - size.width) {
-    const cell = cells[index + size.width];
-    if (isEnabled(cell))
-      neighbours.set(Direction.BOTTOM, cell);
-  }
+  // BOTTOM
+  if (index < cells.length - size.width) { neighboursCells.push(index + size.width); }
 
-  if (index % size.width != 0) {
-    const cell = cells[index - 1];
-    if (isEnabled(cell))
-      neighbours.set(Direction.LEFT, cell);
-  }
+  // LEFT
+  if (index % size.width != 0) { neighboursCells.push(index - 1); }
 
-  if (visitableOnly) {
-    const visitableNeighbours = Array.from(neighbours.entries())
-      .filter(([dir]) => {
-        const index1 = toIndex(getRelativePosition(position, dir), {size});
-        const index2 = toIndex(position, {size});
-        return !hasInterWall<RectangularBoard, Direction>(
-          index1, index2, {cells: cells, size},
-          getRelativeDirection, getOpposingDirection
-        );
-      });
-
-    neighbours = new Map(visitableNeighbours);
-  }
-
-  return neighbours;
-}
-
-/**
- * Returns a neighbour cell in relative direction of given position
- */
-export function getNeighbourCell(position: Position, direction: Direction, {cells, size}: RectangularBoard) {
-  const newPosition = getRelativePosition(position, direction);
-  return getCellByPosition(newPosition, {cells: cells, size});
+  return neighboursCells;
 }
 
 /**
@@ -236,10 +201,6 @@ export function getRows({cells, size}: RectangularBoard): number[][] {
       acc[acc.length - 1].push(item);
       return acc;
     }, []);
-}
-
-export function getNextRowNeighbours(index: number, {size}: RectangularBoard): number[] {
-  return [index + size.width]
 }
 
 /*-------------------------

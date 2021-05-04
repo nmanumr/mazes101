@@ -58,13 +58,6 @@ function render() {
   boardEl.innerHTML = Renderers[rendererEl.value].render(board);
 }
 
-let board = Boards.rectangular.newBoard({height: 10, width: 10});
-
-let {removeInterWall, getRows, getNextRowNeighbours} = Boards.rectangular;
-board = Generators.eller.generate(board, {removeInterWall, getRows, getNextRowNeighbours});
-
-const renderedBoard = Renderers.rectangularSvg.render(board);
-
 populateBoardTypes();
 populateGenerators();
 populateRenderer();

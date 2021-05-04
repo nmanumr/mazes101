@@ -25,7 +25,7 @@ interface BoardFunctions<Board extends BaseBoard> {
   getFactor?(rowIndex: number): number;
 }
 
-export const _required_fns = keys<BoardFunctions<BaseBoard>>();
+export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>();
 
 /*---------------
  * Main function
