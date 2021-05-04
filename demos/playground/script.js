@@ -5,6 +5,7 @@ const boardEl = document.querySelector('#board');
 const boardTypeEl = document.querySelector('#board-type');
 const generatorEl = document.querySelector('#generator');
 const rendererEl = document.querySelector('#renderer');
+const regenerateEl = document.querySelector('#regenerate');
 
 function removeElementChildren(element) {
   while (element.lastElementChild) {
@@ -48,7 +49,10 @@ function populateRenderer() {
 }
 
 function render() {
-  let board = Boards[boardTypeEl.value].newBoard({height: 10, width: 10, radius: 10});
+  let board = Boards[boardTypeEl.value].newBoard({height: 4, width: 4, radius: 10});
+
+  board = Maze.baseBoard.disableCell(6, board);
+
   let fns = Generators[generatorEl.value]._required_fns.reduce((acc, fn) => {
     acc[fn] = Boards[boardTypeEl.value][fn];
     return acc;
@@ -69,10 +73,6 @@ boardTypeEl.addEventListener('change', () => {
   render();
 });
 
-generatorEl.addEventListener('change', () => {
-  render();
-});
-
-rendererEl.addEventListener('change', () => {
-  render();
-});
+generatorEl.addEventListener('change', render);
+rendererEl.addEventListener('change', render);
+regenerateEl.addEventListener('click', render);

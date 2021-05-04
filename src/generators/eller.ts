@@ -1,4 +1,4 @@
-import {BaseBoard} from "../base.js";
+import {BaseBoard, isEnabled} from "../base.js";
 import {getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet.js";
 import {getRandomFrom, shuffle} from "../utils.js";
 import {keys} from "ts-transformer-keys";
@@ -45,6 +45,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
   }
 
   [board, pathSets] = visitRow(rows[rows.length - 1], true, board, pathSets, fns);
+  // TODO: if pathSets have length greater than 1 try to merge the path sets
   return board;
 }
 
@@ -63,6 +64,17 @@ function visitRow<Board extends BaseBoard>(
   fns: BoardFunctions<Board>
 ): [Board, ItemSets<number>] {
   for (let i = 1; i < row.length; i++) {
+    if (getItemSet(row[i - 1], pathSets) == null) {
+      pathSets.push(new Set([row[i - 1]]));
+    }
+    if (getItemSet(row[i], pathSets) == null) {
+      pathSets.push(new Set([row[i]]));
+    }
+
+    // check if cells are neighbours
+    let neighbours = fns.getNeighbours(row[i - 1], board);
+    if (!neighbours.includes(row[i])) continue;
+
     if (isFromSameSet(row[i - 1], row[i], pathSets)) {
       continue;
     }
@@ -70,10 +82,6 @@ function visitRow<Board extends BaseBoard>(
     if (Math.random() > 0.5 || mergeAll) {
       board = fns.removeInterWall(row[i - 1], row[i], board);
       pathSets = joinItemSets(row[i - 1], row[i], pathSets);
-    } else if (getItemSet(row[i - 1], pathSets) == null) {
-      pathSets.push(new Set([row[i - 1]]));
-    } else if (getItemSet(row[i], pathSets) == null) {
-      pathSets.push(new Set([row[i]]));
     }
   }
 
@@ -98,6 +106,9 @@ function visitNextRow<Board extends BaseBoard>(
       const nextRowCells = fns.getNeighbours(cell, board).filter((c) => nextRow.includes(c));
       const nextCell = getRandomFrom(nextRowCells);
 
+      if (!nextCell) {
+        continue;
+      }
       board = fns.removeInterWall(cell, nextCell, board);
       set.add(nextCell);
     }

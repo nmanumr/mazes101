@@ -38,6 +38,21 @@ export function isEnabled(cell: number): boolean {
   return (cell & 1 << 7) === 0;
 }
 
+/** disable cell at given index */
+export function disableCell<Board extends BaseBoard>(index: number, board: Board): Board {
+  let cells = board.cells.slice(0);
+  cells[index] = cells[index] | (1 << 7);
+  return {...board, cells};
+}
+
+export function disableCells<Board extends BaseBoard>(indexes: number[], board: Board): Board {
+  let cells = board.cells.slice(0);
+  for (let index of indexes) {
+    cells[index] = cells[index] | (1 << 7);
+  }
+  return {...board, cells};
+}
+
 /**
  * Returns a new cell representation of the
  * given cell with all wall removed

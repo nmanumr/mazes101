@@ -144,15 +144,14 @@ export function getNeighbours(index: number, {cells, size}: RectangularBoard): n
 
   // TOP
   if (index >= size.width) { neighboursCells.push(index - size.width); }
-
   // RIGHT
   if ((index + 1) % size.width != 0) { neighboursCells.push(index + 1); }
-
   // BOTTOM
   if (index < cells.length - size.width) { neighboursCells.push(index + size.width); }
-
   // LEFT
   if (index % size.width != 0) { neighboursCells.push(index - 1); }
+
+  neighboursCells = neighboursCells.filter((i) => isEnabled(cells[i]));
 
   return neighboursCells;
 }
@@ -192,7 +191,9 @@ export function getAllowedDirection({x, y}: Position, {cells, size}: Rectangular
  */
 export function getRows({cells, size}: RectangularBoard): number[][] {
   return cells
+    // map cell to its index
     .map((_, i) => i)
+    // map indexes into rows based on board width
     .reduce((acc, item, index) => {
       if (index % size.width === 0) {
         acc.push([]);
@@ -200,7 +201,11 @@ export function getRows({cells, size}: RectangularBoard): number[][] {
 
       acc[acc.length - 1].push(item);
       return acc;
-    }, []);
+    }, [])
+    // don't allow any disabled cell
+    .map((row) => row.filter((c) => isEnabled(cells[c])))
+    // ignore empty rows
+    .filter((row) => row.length);
 }
 
 /*-------------------------
