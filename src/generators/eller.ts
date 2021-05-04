@@ -16,9 +16,17 @@ interface BoardFunctions<Board extends BaseBoard> {
 
   /** get cell neighbour */
   getNeighbours(index: number, board: Board): number[];
+
+  /**
+   * should return a number between 0 - 1
+   * default is 0.5
+   * greater the number longer the vertical passages
+   * shorter the number longer the horizontal passages
+   */
+  getFactor?(rowIndex: number): number;
 }
 
-export const _required_fns = keys<BoardFunctions<BaseBoard>>();
+export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>();
 
 /*---------------
  * Main function
@@ -30,6 +38,10 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
  * Ref: https://weblog.jamisbuck.org/2010/12/29/maze-generation-eller-s-algorithm
  */
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>): Board {
+  if (!fns.getFactor) {
+    fns.getFactor = () => 0.5;
+  }
+
   let pathSets: ItemSets<number> = [];
   const rows = fns.getRows(board);
 
@@ -38,13 +50,13 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
     pathSets.push(new Set([index]));
   }
 
-  for (let i = 0; i < rows.length-1; i++) {
+  for (let i = 0; i < rows.length - 1; i++) {
     let row = rows[i];
-    [board, pathSets] = visitRow(row, false, board, pathSets, fns);
-    [board, pathSets] = visitNextRow(row, rows[i+1], board, pathSets, fns);
+    [board, pathSets] = visitRow(row, i, false, board, pathSets, fns);
+    [board, pathSets] = visitNextRow(row, rows[i + 1], board, pathSets, fns);
   }
 
-  [board, pathSets] = visitRow(rows[rows.length - 1], true, board, pathSets, fns);
+  [board, pathSets] = visitRow(rows[rows.length - 1], rows.length - 1, true, board, pathSets, fns);
   // TODO: if pathSets have length greater than 1 try to merge the path sets
   return board;
 }
@@ -58,6 +70,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
  */
 function visitRow<Board extends BaseBoard>(
   row: number[],
+  rowIndex: number,
   mergeAll: boolean,
   board: Board,
   pathSets: ItemSets<number>,
@@ -79,7 +92,7 @@ function visitRow<Board extends BaseBoard>(
       continue;
     }
 
-    if (Math.random() > 0.5 || mergeAll) {
+    if (Math.random() > fns.getFactor(rowIndex) || mergeAll) {
       board = fns.removeInterWall(row[i - 1], row[i], board);
       pathSets = joinItemSets(row[i - 1], row[i], pathSets);
     }
