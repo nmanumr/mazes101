@@ -1,0 +1,4 @@
+.mono {
+    font-feature-settings: "kern";
+    font-family: var(--md-code-font-family,_),SFMono-Regular,Consolas,Menlo,monospace;
+}
