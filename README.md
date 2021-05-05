@@ -12,8 +12,8 @@ npm i mazes101 --save
 
 ```js
 // 1. create an empty board
-import {rectangularBoard} from 'mazes101/boards/rectangular';
-let board = rectangularBoard({height: 20, width: 20});
+import {newBoard} from 'mazes101/boards/rectangular';
+let board = newBoard({height: 20, width: 20});
 
 // 2. generate maze in that board
 import {getRows, getNextRowNeighbours, removeInterWall} from 'mazes101/boards/rectangular';

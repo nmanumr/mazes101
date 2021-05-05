@@ -1,0 +1,54 @@
+site_name: Mazes101
+repo_url: https://github.com/nmanumr/mazes101
+repo_name: nmanumr/mazes101
+copyright: Copyright &copy; 2021 - 2022 Nauman Umer
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/nmanumr/mazes101
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/nmanumr
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Boards:
+      - Overview: 'boards/index.md'
+      - Rectangular Board: 'boards/rectangular.md'
+      - Circular Board: 'boards/circular.md'
+      - Custom Board: 'boards/custom.md'
+  - Generators:
+      - Overview: 'generators/index.md'
+  - Renderers:
+      - Overview: 'renderers/index.md'
+
+theme:
+  name: material
+  features:
+    - navigation.expand
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
