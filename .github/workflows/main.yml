@@ -13,5 +13,5 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install mkdocs-material
-      - run: mkdir site && mkdir site/demos && cp -r demos/ site/demos/
+      - run: mkdir site && cp -r demos/ site/
       - run: mkdocs gh-deploy --force --dirty
