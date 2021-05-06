@@ -16,6 +16,7 @@ extra_css:
 markdown_extensions:
   - toc:
       permalink: true
+  - def_list
   - attr_list
   - admonition
   - pymdownx.details
@@ -37,8 +38,17 @@ nav:
       - Custom Board: 'boards/custom.md'
   - Generators:
       - Overview: 'generators/index.md'
+      - Aldous Broder: 'generators/aldousBroder.md'
+#      - Backtrack: 'generators/backtrack.md'
+      - Eller: 'generators/eller.md'
+      - Kruskal: 'generators/kruskal.md'
+      - Prim: 'generators/prim.md'
+      - Sidewinder: 'generators/sidewinder.md'
+#      - Wilson: 'generators/wilson.md'
   - Renderers:
       - Overview: 'renderers/index.md'
+      - CircularSVG: 'renderers/circularSvg.md'
+      - RectangularSVG: 'renderers/rectangularSvg.md'
 
 theme:
   name: material

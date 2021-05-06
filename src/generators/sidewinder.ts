@@ -34,7 +34,7 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
 /**
  * Generates maze using sidewinder maze generation Algorithm
  *
- * Ref:https://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
+ * Ref: https://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
  */
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
   let rows = fns.getRows(board);

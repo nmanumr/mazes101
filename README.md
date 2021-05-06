@@ -34,6 +34,19 @@ feel free to open an issue or direct create a PR for that. Following
 this a basic overview of progress on this project. We can also pickup
 anything that is not implemented yet. 
 
+## For development
+
+```sh
+# to build mazes101 in watch mode
+npm run watch
+
+# to serve documentation
+pipenv run mkdocs serve
+
+# to build documentation
+pipenv run mkdocs build
+```
+
 ## Progress
 
 * Boards
