@@ -2,6 +2,8 @@
 
 Utilities to generate, render and hack with any sort of mazes.
 
+[See Docs](https://nmanumr.github.io/mazes101/)
+
 ## Installation
 
 ```sh

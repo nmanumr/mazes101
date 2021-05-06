@@ -1,7 +1,8 @@
 # Home
 
-This project provides set of utilities to generate, render, and other kind of stuff with mazes. For now only Circular,
-and Rectangular maze boards are supported but support for any other board can be added easily.
+This project provides set of utilities to generate, render, and other kind of stuff with mazes. For now only
+[Circular](boards/circular.md), and [Rectangular](boards/rectangular.md) maze boards
+are supported but support for any other board can be added easily.
 
 ## Installation
 
@@ -34,8 +35,8 @@ The typical flow of generating a maze looks something as following:
 
 ### Step 1: Create an empty board
 
-First, chose a type of board you can create then create an empty board of that type. For example for a rectangular board
-you can import it from `boards/rectangular` and use it like:
+First, chose a [Board Type](boards/index.md) you can create then create an empty board of that type. For example for a rectangular board
+you can import it from [`boards/rectangular`](boards/rectangular.md) and use it like:
 
 ```js linenums="1"
 import {newBoard} from 'mazes101/boards/rectangular';
@@ -49,7 +50,8 @@ disabling some cells etc.
 ### Step 2: Generate maze
 
 Next, step could be to generate a maze in this board, for this you need a maze generation algorithm. Mazes101 comes with
-some built-in algorithms for example let your Kruskals's minimum spanning tree algorithm:
+some built-in [Generation Algorithms](generators/index.md) for example lets use
+[`generators/kruskal`](generators/kruskal.md):
 
 ```js linenums="4"
 import {generate} from 'mazes101/generators/kruskal';
@@ -71,8 +73,8 @@ board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
 
 ### Step 3: Render the board
 
-The last step would be to render the board, Mazes101 comes with some built-in renderers too. For example,
-`renderers/rectangularSvg` this renderer renders rectangular boards to svg string.
+The last step would be to render the board, Mazes101 comes with some built-in [Renderers](renderers/index.md) too.
+For example, [`renderers/rectangularSvg`](renderers/rectangularSvg.md) this renderer renders rectangular boards to svg string.
 
 ```js linenums="14"
 import {render} from 'mazes101/renderers/rectangularSvg';
