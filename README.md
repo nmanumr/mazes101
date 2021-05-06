@@ -48,18 +48,3 @@ pipenv run mkdocs serve
 # to build documentation
 pipenv run mkdocs build
 ```
-
-## Progress
-
-* Boards
-    * [x] Rectangular Board
-    * [x] Circular Board
-    * [ ] Triangular Board
-    * [ ] Hexagonal Board
-* Generators
-    * [x] AldousBroder
-    * [x] BackTrack
-    * [x] Eller
-* Renderers
-    * [x] Svg
-    * [ ] Canvas

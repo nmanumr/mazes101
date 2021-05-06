@@ -25,7 +25,9 @@ The output bundle for basic rectangular maze is normally upto 3KBs.
 
 ### via CDN
 
-Coming Soon...
+```js
+import Maze from 'https://cdn.jsdelivr.net/npm/mazes101@1.0.0/dist/index.min.js';
+```
 
 
 ## Usage
