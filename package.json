@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/nmanumr/mazes101/issues"
   },
-  "homepage": "https://github.com/nmanumr/mazes101#readme",
+  "homepage": "https://nmanumr.github.io/mazes101/",
   "devDependencies": {
     "ts-transformer-keys": "^0.4.3",
     "tslib": "^2.2.0",
