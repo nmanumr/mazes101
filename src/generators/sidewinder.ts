@@ -1,6 +1,8 @@
 import {BaseBoard} from "../base.js";
-import {getRandomFrom, getRandomInt} from "../utils.js";
+import {getRandomFrom, shuffle} from "../utils.js";
 import {keys} from "ts-transformer-keys";
+import {ItemSets} from "./_pathSet";
+import {visitRow} from './eller.js';
 
 /*--------------
  * Types
@@ -38,38 +40,48 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
  */
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
   let rows = fns.getRows(board);
+  let pathSets: ItemSets<number> = [];
 
   if (!fns.getFactor) {
     fns.getFactor = () => 0.5;
   }
 
-  for (let i = 1; i < rows[0].length; i++) {
-    board = fns.removeInterWall(rows[0][i], rows[0][i - 1], board);
-  }
+  [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns);
 
-  for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
-    let joinedCells = 0;
-
-    for (let cellIndex = 1; cellIndex < rows[rowIndex].length; cellIndex++) {
-      if (Math.random() > fns.getFactor(rowIndex)) {
-        board = fns.removeInterWall(rows[rowIndex][cellIndex - 1], rows[rowIndex][cellIndex], board);
-        joinedCells++;
-      } else {
-        const h = getRandomInt(cellIndex - 1 - joinedCells, cellIndex);
-        let neighbours = fns.getNeighbours(rows[rowIndex][h], board);
-        let previousRowNeighbours = neighbours.filter((n) => rows[rowIndex - 1].includes(n));
-
-        board = fns.removeInterWall(getRandomFrom(previousRowNeighbours), rows[rowIndex][h], board);
-        joinedCells = 0;
-      }
-    }
-
-    const h = getRandomInt(rows[rowIndex].length - joinedCells - 1, rows[rowIndex].length);
-    let neighbours = fns.getNeighbours(rows[rowIndex][h], board);
-    let previousRowNeighbours = neighbours.filter((n) => rows[rowIndex - 1].includes(n));
-
-    board = fns.removeInterWall(getRandomFrom(previousRowNeighbours), rows[rowIndex][h], board);
+  for (let i = 1; i < rows.length; i++) {
+    [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns);
+    [board, pathSets] = connectToOtherRow(rows[i], rows[i - 1], board, pathSets, fns);
   }
 
   return board;
+}
+
+/** open passages between the cells of current row and the next row */
+export function connectToOtherRow<Board extends BaseBoard>(
+  row: number[],
+  nextRow: number[],
+  board: Board,
+  pathSets: ItemSets<number>,
+  fns: BoardFunctions<Board>
+): [Board, ItemSets<number>] {
+  for (let set of pathSets) {
+    let rowCells = Array.from(set).filter((index) => row.includes(index));
+    rowCells = shuffle(rowCells);
+
+    let cell = getRandomFrom(rowCells);
+    if (cell === undefined || cell === null) {
+      continue;
+    }
+
+    const otherRowCells = fns.getNeighbours(cell, board).filter((c) => nextRow.includes(c));
+    const otherCell = getRandomFrom(otherRowCells);
+    if (otherCell === undefined || otherCell === null) {
+      continue;
+    }
+
+    board = fns.removeInterWall(cell, otherCell, board);
+    set.add(otherCell);
+  }
+
+  return [board, pathSets];
 }

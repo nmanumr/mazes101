@@ -49,9 +49,9 @@ function populateRenderer() {
 }
 
 function render() {
-  let board = Boards[boardTypeEl.value].newBoard({height: 10, width: 10, radius: 10});
+  let board = Boards[boardTypeEl.value].newBoard({height: 5, width: 5, radius: 10});
 
-  // board = Maze.baseBoard.disableCell(6, board);
+  board = Maze.baseBoard.disableCell(6, board);
 
   let fns = Generators[generatorEl.value]._required_fns.reduce((acc, fn) => {
     acc[fn] = Boards[boardTypeEl.value][fn];

@@ -1,4 +1,4 @@
-import {BaseBoard} from "../base.js";
+import {BaseBoard, isEnabled} from "../base.js";
 import {difference, getRandomFrom, getRandomIndexFrom} from "../utils.js";
 import {keys} from "ts-transformer-keys";
 
@@ -23,11 +23,14 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 /**
  * Generates maze using Wilson's maze generation Algorithm
  *
- * Ref: https://weblog.jamisbuck.org/2011/1/20/maze-generation-wilson-s-algorithm.html
+ * Ref: http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm
  */
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>): Board {
   let visitedCells = new Set<number>();
-  let currentCell = getRandomIndexFrom(board.cells);
+  const enabledCells = board.cells
+    .map((_, i) => i)
+    .filter((i) => isEnabled(board.cells[i]));
+  let currentCell = getRandomFrom(enabledCells);
   let neighbourCells = new Set(fns.getNeighbours(currentCell, board));
 
   visitedCells.add(currentCell);

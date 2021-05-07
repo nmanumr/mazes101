@@ -1,4 +1,4 @@
-import {BaseBoard, isEnabled} from "../base.js";
+import {BaseBoard} from "../base.js";
 import {getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet.js";
 import {getRandomFrom, shuffle} from "../utils.js";
 import {keys} from "ts-transformer-keys";
@@ -53,7 +53,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
   for (let i = 0; i < rows.length - 1; i++) {
     let row = rows[i];
     [board, pathSets] = visitRow(row, i, false, board, pathSets, fns);
-    [board, pathSets] = visitNextRow(row, rows[i + 1], board, pathSets, fns);
+    [board, pathSets] = connectToOtherRow(row, rows[i + 1], board, pathSets, fns);
   }
 
   [board, pathSets] = visitRow(rows[rows.length - 1], rows.length - 1, true, board, pathSets, fns);
@@ -68,7 +68,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
 /**
  * Visit row cells and randomly merge them
  */
-function visitRow<Board extends BaseBoard>(
+export function visitRow<Board extends BaseBoard>(
   row: number[],
   rowIndex: number,
   mergeAll: boolean,
@@ -102,7 +102,7 @@ function visitRow<Board extends BaseBoard>(
 }
 
 /** open passages between the cells of current row and the next row */
-function visitNextRow<Board extends BaseBoard>(
+export function connectToOtherRow<Board extends BaseBoard>(
   row: number[],
   nextRow: number[],
   board: Board,
@@ -119,7 +119,7 @@ function visitNextRow<Board extends BaseBoard>(
       const nextRowCells = fns.getNeighbours(cell, board).filter((c) => nextRow.includes(c));
       const nextCell = getRandomFrom(nextRowCells);
 
-      if (!nextCell) {
+      if (nextCell === undefined || nextCell === null) {
         continue;
       }
       board = fns.removeInterWall(cell, nextCell, board);
