@@ -66,8 +66,8 @@ export function toIndex(position: Position, {size}: PartialExcept<RectangularBoa
  */
 export function toPosition(index: number, {size}: PartialExcept<RectangularBoard, 'size'>) {
   return {
-    x: index % size.height,
-    y: Math.floor(index / size.height),
+    x: index % size.width,
+    y: Math.floor(index / size.width),
   };
 }
 
