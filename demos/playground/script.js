@@ -1,11 +1,25 @@
 import Maze from '../../dist/index.js';
 
-const {Boards, Generators, Renderers} = Maze;
+const {Boards, Generators, Renderers, RectangularMask} = Maze;
 const boardEl = document.querySelector('#board');
 const boardTypeEl = document.querySelector('#board-type');
 const generatorEl = document.querySelector('#generator');
 const rendererEl = document.querySelector('#renderer');
 const regenerateEl = document.querySelector('#regenerate');
+
+window.RectangularMask = RectangularMask;
+
+let fontData = {
+  48: 'F09090909090F000',
+  52: '909090F010101000',
+  53: 'F08080F01010F000',
+}
+
+let mask = RectangularMask.maskFromText('404', {fontData: RectangularMask.loadHexFontData(fontData, true, true)});
+let board = Boards.rectangular.newBoard({height: mask.length, width: mask[0].length});
+board = RectangularMask.applyMask(board, mask);
+board = Generators.kruskal.generate(board, {...Boards.rectangular});
+boardEl.innerHTML = Renderers.rectangularSvg.render(board);
 
 function removeElementChildren(element) {
   while (element.lastElementChild) {
@@ -49,9 +63,10 @@ function populateRenderer() {
 }
 
 function render() {
-  let board = Boards[boardTypeEl.value].newBoard({height: 5, width: 5, radius: 10});
+  let board = Boards[boardTypeEl.value].newBoard({height: 10, width: 10, radius: 10});
 
-  board = Maze.baseBoard.disableCell(6, board);
+  // board = Maze.baseBoard.disableCell(6, board);
+  // board = Maze.baseBoard.disableCell(11, board);
 
   let fns = Generators[generatorEl.value]._required_fns.reduce((acc, fn) => {
     acc[fn] = Boards[boardTypeEl.value][fn];
