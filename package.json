@@ -2,12 +2,15 @@
   "name": "mazes101",
   "version": "1.0.2",
   "description": "Utilities to generate, render and hack with any sort of mazes",
-  "main": "dist/index.js",
+  "main": "cjs/mazes101.js",
+  "module": "esm/index.js",
   "files": [
-    "dist"
+    "cjs/**",
+    "esm/**",
+    "umd/**"
   ],
   "scripts": {
-    "build": "ttsc",
+    "build": "rm -rf cjs esm umd && ttsc && rollup --config",
     "watch": "ttsc --watch",
     "prepublishOnly": "npm run build"
   },
@@ -15,7 +18,13 @@
     "type": "git",
     "url": "git+https://github.com/nmanumr/mazes101.git"
   },
-  "keywords": ["maze", "maze-puzzle", "circular-maze", "rectangular-maze", "game"],
+  "keywords": [
+    "maze",
+    "maze-puzzle",
+    "circular-maze",
+    "rectangular-maze",
+    "game"
+  ],
   "author": "nmanumr",
   "license": "MIT",
   "bugs": {
@@ -23,6 +32,10 @@
   },
   "homepage": "https://nmanumr.github.io/mazes101/",
   "devDependencies": {
+    "rollup": "^2.47.0",
+    "rollup-plugin-multi-input": "^1.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
     "ts-transformer-keys": "^0.4.3",
     "tslib": "^2.2.0",
     "ttypescript": "^1.5.12",

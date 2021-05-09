@@ -192,3 +192,8 @@ site
 
 public/script
 public/style.css
+
+
+cjs
+umd
+esm
