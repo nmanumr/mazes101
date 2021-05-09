@@ -190,7 +190,7 @@ export function getAllowedDirection({x, y}: Position, {cells, size}: Rectangular
  * return array of rows of cells
  */
 export function getRows({cells, size}: RectangularBoard): number[][] {
-  return cells
+  return Array.from(cells)
     // map cell to its index
     .map((_, i) => i)
     // map indexes into rows based on board width
