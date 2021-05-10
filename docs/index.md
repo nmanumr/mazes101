@@ -25,10 +25,12 @@ The output bundle for basic rectangular maze is normally upto 3KBs.
 
 ### via CDN
 
-```js
-import Maze from 'https://cdn.jsdelivr.net/npm/mazes101@1.0.0/dist/index.min.js';
+```html
+<script src="https://cdn.jsdelivr.net/npm/mazes101@1.1.3/index.umd.js"></script>
+<script>
+ // here mazes101 is available in global scope
+</script>
 ```
-
 
 ## Usage
 
@@ -40,11 +42,34 @@ The typical flow of generating a maze looks something as following:
 First, chose a [Board Type](boards/index.md) you can create then create an empty board of that type. For example for a rectangular board
 you can import it from [`boards/rectangular`](boards/rectangular.md) and use it like:
 
-```js linenums="1"
-import {newBoard} from 'mazes101/boards/rectangular';
+=== "EcmaScript"
 
-let board = newBoard({height: 20, width: 20});
-```
+    ```js linenums="1"
+    import {newBoard} from 'mazes101/boards/rectangular';
+    
+    let board = newBoard({height: 20, width: 20});
+    ```
+
+=== "NodeJs"
+    
+    ```js linenums="1"
+    import mazes101 from 'mazes101';
+    let {newBoard} = mazes101.Boards.rectangular;
+    let board = newBoard({height: 20, width: 20});
+    ```
+    
+=== "CDN"
+    
+    ```html
+    <script src="https://cdn.jsdelivr.net/npm/mazes101@1.1.3/index.umd.js"></script>
+    ```
+    
+    ```js linenums="1"
+    let {newBoard} = mazes101.Boards.rectangular;
+    
+    let board = newBoard({height: 20, width: 20});
+    ```
+
 
 Before generating a maze in this board, you can also do some preprocessing on this board, like
 disabling some cells etc.
@@ -55,18 +80,35 @@ Next, step could be to generate a maze in this board, for this you need a maze g
 some built-in [Generation Algorithms](generators/index.md) for example lets use
 [`generators/kruskal`](generators/kruskal.md):
 
-```js linenums="4"
-import {generate} from 'mazes101/generators/kruskal';
+=== "EcmaScript"
 
-// import required functions from the board you selected in step 1
-import {
-  getRows,
-  getNextRowNeighbours,
-  removeInterWall
-} from 'mazes101/boards/rectangular';
+    ```js linenums="4"
+    import {generate} from 'mazes101/generators/kruskal';
+    
+    // import required functions from the board you selected in step 1
+    import {
+      getRows,
+      getNextRowNeighbours,
+      removeInterWall
+    } from 'mazes101/boards/rectangular';
+    
+    board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
+    ```
 
-board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
-```
+=== "NodeJs/CDN"
+    
+    ```js linenums="4"
+    let {generate} = mazes101.Generators.kruskal;
+    
+    // import required functions from the board you selected in step 1
+    let {
+      getRows,
+      getNextRowNeighbours,
+      removeInterWall
+    } = mazes101.Boards.rectangular;
+    
+    board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
+    ```
 
 !!! note
     The `generate` method returns a new board instead of altering the provided board so, it is important to assign that
@@ -78,10 +120,20 @@ board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
 The last step would be to render the board, Mazes101 comes with some built-in [Renderers](renderers/index.md) too.
 For example, [`renderers/rectangularSvg`](renderers/rectangularSvg.md) this renderer renders rectangular boards to svg string.
 
-```js linenums="14"
-import {render} from 'mazes101/renderers/rectangularSvg';
+=== "EcmaScript"
 
-const svgString = render(board);
-```
+    ```js linenums="14"
+    import {render} from 'mazes101/renderers/rectangularSvg';
+    
+    const svgString = render(board);
+    ```
+
+=== "NodeJs/CDN"
+    
+    ```js linenums="14"
+    let {render} = mazes101.Renderers.rectangularSvg;
+    
+    const svgString = render(board);
+    ```
 
 Now, you can either render this svg string to DOM, save it to a file or send it to client via http.

@@ -12,15 +12,36 @@ npm i mazes101 --save
 
 ## Usage
 
+### For commonjs modules (nodejs)
+
+```js
+let maze = require('mazes101');
+
+// 1. create an empty board
+let {newBoard} = maze.Boards.rectangular;
+let board = newBoard({height: 20, width: 20});
+
+// 2. generate maze in that board
+let {getRows, getNeighbours, removeInterWall} = maze.Boards.rectangular;
+let {generate} = maze.Generators.kruskal;
+board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
+
+// 3. render the board
+let {render} = maze.Renderers.rectangularSvg;
+const svgString = render(board);
+```
+
+### For ecmascript modules
+
 ```js
 // 1. create an empty board
 import {newBoard} from 'mazes101/boards/rectangular';
 let board = newBoard({height: 20, width: 20});
 
 // 2. generate maze in that board
-import {getRows, getNextRowNeighbours, removeInterWall} from 'mazes101/boards/rectangular';
+import {getRows, getNeighbours, removeInterWall} from 'mazes101/boards/rectangular';
 import {generate} from 'mazes101/generators/eller';
-board = generate(board, {getRows, getNextRowNeighbours, removeInterWall});
+board = generate(board, {getRows, getNeighbours, removeInterWall});
 
 // 3. render the board
 import {render} from 'mazes101/renderers/rectangularSvg';
