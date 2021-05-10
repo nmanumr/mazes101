@@ -12,6 +12,7 @@
     "build": "rm -rf dist && ttsc && rollup --config",
     "watch": "ttsc --watch",
     "prepublishOnly": "npm run build",
+    "postbuild": "cp package.json dist",
     "semantic-release": "semantic-release"
   },
   "repository": {
