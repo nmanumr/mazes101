@@ -1,25 +1,29 @@
 import {terser} from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript2';
-import multiInput from 'rollup-plugin-multi-input';
 
 const keysTransformer = require('ts-transformer-keys/transformer').default;
 
-const transformer = (service) => ({
-  before: [keysTransformer(service.getProgram())],
-  after: []
-});
+const transformer = (service) => {
+  return {
+    before: [keysTransformer(service.getProgram())],
+    after: []
+  }
+};
 
 export default [
   {
     input: 'src/index.ts',
     plugins: [
       typescript({
-        transformers: [transformer]
+        transformers: [transformer],
+        tsconfigOverride: {
+          compilerOptions: { declaration: true }
+        }
       }),
       terser()
     ],
     output: {
-      file: 'umd/mazes101.js',
+      file: 'dist/index.umd.js',
       format: 'umd',
       name: 'mazes101',
       esModule: false
@@ -28,13 +32,16 @@ export default [
   {
     input: ['src/index.ts'],
     plugins: [
-      multiInput(),
       typescript({
-        transformers: [transformer]
+        transformers: [transformer],
+        tsconfigOverride: {
+          compilerOptions: {declaration: true},
+        }
       })
     ],
     output: {
-      dir: 'cjs',
+      dir: 'dist',
+      entryFileNames: '[name].cjs',
       format: 'cjs',
       exports: 'auto'
     }

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "outDir": "esm",
+    "declaration": false,
+    "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "node",
     "target": "ES2019",
