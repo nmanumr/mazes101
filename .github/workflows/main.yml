@@ -13,7 +13,8 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
-      - run: mkdir dist && cp package.json dist/
+      - run: npm run build
+      - run: cp package.json dist/
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
