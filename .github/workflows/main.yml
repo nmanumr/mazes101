@@ -15,3 +15,12 @@ jobs:
       - run: pip install mkdocs-material
       - run: mkdir site && cp -r demos/ site/
       - run: mkdocs gh-deploy --force --dirty
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm ci
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
