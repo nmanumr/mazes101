@@ -1,6 +1,8 @@
 /**
  * returns a new array with item elements shuffled
  */
+import {BaseBoard} from "./base";
+
 export function shuffle<T>(array: T[]): T[] {
   let out = array.slice(0);
 

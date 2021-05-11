@@ -1,6 +1,6 @@
-import {BaseBoard} from "../base.js";
-import {getRandomIndexFrom} from "../utils.js";
-import { keys } from 'ts-transformer-keys';
+import {BaseBoard, isEnabled} from "../base.js";
+import {getRandomFrom, getRandomIndexFrom, randomWalk} from "../utils.js";
+import {keys} from 'ts-transformer-keys';
 
 /*--------------
  * Types
@@ -12,12 +12,6 @@ interface BoardFunctions<Board extends BaseBoard> {
 
   /** get cell neighbour */
   getNeighbours(index: number, board: Board): number[];
-
-  randomWalk(
-    startPosition: number, board: Board,
-    getNeighbours: (index: number, board: Board) => number[],
-    until: (position: number, path: number[]) => boolean
-  ): number[]
 }
 
 export const _required_fns = keys<BoardFunctions<BaseBoard>>();
@@ -30,22 +24,30 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
  * Generates maze using BackTrace maze generation Algorithm
  */
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
+  let visitableCells = Array.from(board.cells)
+    .map((_, i) => i)
+    .filter((c) => isEnabled(c));
+
   let visitedCells = new Set();
-  let currentCell = getRandomIndexFrom(board.cells);
+  let currentCell = getRandomFrom(visitableCells);
   visitedCells.add(currentCell);
   let pathStack = [currentCell];
 
   while (pathStack.length !== 0) {
-    let path = fns.randomWalk(pathStack.pop(), board, fns.getNeighbours, (position: number, path: number[]) => {
-      const cellNeighbours = fns.getNeighbours(position, board);
-      const unvisitedNeighbours = cellNeighbours.filter((c) => !visitedCells.has(c));
+    currentCell = pathStack[pathStack.length - 1];
 
-      return unvisitedNeighbours.length > 0;
-    });
+    let cellNeighbours = fns.getNeighbours(currentCell, board);
+    const unvisitedNeighbours = cellNeighbours.filter((c) => !visitedCells.has(c));
 
-    for (let i = 1; i < path.length; i++) {
-      board = fns.removeInterWall(path[i-1], path[i], board);
+    if (unvisitedNeighbours.length > 0) {
+      let randomCell = getRandomFrom(unvisitedNeighbours);
+      visitedCells.add(randomCell);
+      board = fns.removeInterWall(currentCell, randomCell, board);
+      pathStack.push(randomCell);
+    } else {
+      pathStack.pop();
     }
-    pathStack = [...pathStack, ...path];
   }
+
+  return board;
 }

@@ -79,7 +79,7 @@ export function maskFromText(text: string, opt: Partial<MaskOptions> = {}) {
  * For example:
  * {48: 'F0'} -> {48: [[1,1,1,1, 0,0,0,0]]}
  */
-export function loadHexFontData(data: Record<string, string>, trimX = false, trimY = false): FontData {
+export function loadHexFontData(data: Record<string, string>, trimX = true, trimY = true): FontData {
   return Object.fromEntries(Object.entries(data).map(([key, val]) => {
     return [key, hexToBitMap(val, trimX, trimY)];
   }));
