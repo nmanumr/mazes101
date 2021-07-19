@@ -1,22 +1,27 @@
 import {CircularBoard, Direction, getRows} from "../boards/circular.js";
 import {BoardType} from "../base.js";
+import {StrH as globalH} from '../h';
 
-interface RendererOptions {
+interface RendererOptions<T> {
   cellSize: number;
   lineWidth: number;
+  h?: (tag: string, attributes: Record<string, string>, ...children: Array<any>) => T;
 }
 
-const defaultOptions: RendererOptions = {
+const defaultOptions: RendererOptions<string> = {
   cellSize: 30,
   lineWidth: 2,
+  h: globalH,
 }
 
-export function render(board: CircularBoard, options: Partial<RendererOptions> = {}) {
-  options = {...defaultOptions, ...options};
+export function render<T = string>(board: CircularBoard, options: Partial<RendererOptions<T>> = {}): T {
+  options = {...defaultOptions, ...options} as RendererOptions<T>;
+
   const innerRadius = board.size.innerRadius;
   const radiusOffset = (1 - innerRadius) * options.cellSize * 0.75;
-  const radius = options.cellSize * (board.size.radius + innerRadius) * 2 + options.lineWidth + radiusOffset;
-  const canvasSize = radius + (board.size.radius + innerRadius) * 2;
+  const radius = options.cellSize * (board.size.radius - board.size.innerRadius) + radiusOffset + innerRadius * options.cellSize;
+
+  const canvasSize = radius * 2 + options.lineWidth;
   const center = canvasSize / 2;
 
   let rows = getRows(board);
@@ -54,9 +59,13 @@ export function render(board: CircularBoard, options: Partial<RendererOptions> =
     }
   }
 
-  return `<svg stroke="currentColor" fill="none" width="${canvasSize}" height="${canvasSize}" viewBox="0 0 ${canvasSize} ${canvasSize}">
-    <path d="${path}" stroke-width="${options.lineWidth}" stroke-linecap="round"/>
-  </svg>`;
+  const h = options.h;
+  return (
+    <svg stroke="currentColor" fill="none" width={canvasSize} height={canvasSize}
+         viewbox={`0 0 ${canvasSize} ${canvasSize}`}>
+      <path d={path} strokeWidth={options.lineWidth} strokeLinecap="round"/>
+    </svg>
+  );
 }
 
 export const _supported_boards = [BoardType.Circular];

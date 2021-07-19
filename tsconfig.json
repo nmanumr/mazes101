@@ -5,6 +5,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "target": "ES2019",
+    "jsx": "react",
+    "jsxFactory": "h",
     "plugins": [
       { "transform": "ts-transformer-keys/transformer" }
     ],

@@ -1,18 +1,23 @@
 import {Direction, RectangularBoard, toPosition} from "../boards/rectangular.js";
 import {BoardType, isEnabled} from "../base.js";
+import {StrH as globalH} from "../h";
 
-interface RendererOptions {
+interface RendererOptions<T> {
   cellSize: number;
   lineWidth: number;
+  renderDisabled: boolean;
+  h?: (tag: string, attributes: Record<string, string>, ...children: Array<any>) => T;
 }
 
-const defaultOptions: RendererOptions = {
+const defaultOptions: RendererOptions<string> = {
   cellSize: 30,
   lineWidth: 2,
+  renderDisabled: false,
+  h: globalH,
 }
 
-export function render(board: RectangularBoard, options: Partial<RendererOptions> = {}) {
-  options = {...defaultOptions, ...options};
+export function render<T = string>(board: RectangularBoard, options: Partial<RendererOptions<T>> = {}): T {
+  options = {...defaultOptions, ...options} as RendererOptions<T>;
 
   const width = options.cellSize * (board.size.width + 2) + options.lineWidth;
   const height = options.cellSize * (board.size.height + 2) + options.lineWidth;
@@ -44,10 +49,13 @@ export function render(board: RectangularBoard, options: Partial<RendererOptions
     return acc;
   }, '');
 
-  return `<svg stroke="currentColor" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-    <path d="${p2}" fill="#ddd" stroke-width="${0}" stroke-linecap="round"/>
-    <path d="${path}" stroke-width="${options.lineWidth}" stroke-linecap="round"/>
-  </svg>`;
+  const h = options.h;
+  return (
+    <svg stroke="currentColor" width={width} height={height} viewbox={`0 0 ${width} ${height}`}>
+      {options.renderDisabled && <path d={p2} className={'disabledPath'}/>}
+      <path d={path} strokeWidth={options.lineWidth} strokeLinecap="round"/>
+    </svg>
+  );
 }
 
 export const _supported_boards = [BoardType.Rectangular];
