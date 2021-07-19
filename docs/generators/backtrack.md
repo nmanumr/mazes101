@@ -2,6 +2,8 @@
 
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/backtrack.ts)
 
+{{ maze('rectangular', (10, 10), 'backtrack') }}
+
 ## Usage
 
 ```js

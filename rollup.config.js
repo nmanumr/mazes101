@@ -30,6 +30,21 @@ export default [
     }
   },
   {
+    input: 'src/docs.ts',
+    plugins: [
+      typescript({
+        transformers: [transformer],
+      }),
+      terser()
+    ],
+    output: {
+      file: 'docs/javascript/index.js',
+      format: 'iife',
+      name: 'mazes101',
+      esModule: false
+    }
+  },
+  {
     input: ['src/index.ts'],
     plugins: [
       typescript({

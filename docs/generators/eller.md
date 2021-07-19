@@ -2,6 +2,8 @@
 
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/eller.ts)
 
+{{ maze('rectangular', (10, 10), 'eller') }}
+
 Sequentially, considers a single at a time. Assigns the unvisited cells in the current row to different sets.
 Randomly links adjacent cells that belong to different sets, merging the sets together as it go.
 For each remaining set, chooses at least one cell and carve a next row cell, adding that next row cell to the set as well.

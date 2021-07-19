@@ -1,7 +1,8 @@
 # Rectangular Board
 
-## Usage
+{{ maze('rectangular', (10, 10), 'kruskal') }}
 
+## Usage
 
 ### New Board
 

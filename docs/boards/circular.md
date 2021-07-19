@@ -1,5 +1,7 @@
 # Circular Board
 
+{{ maze('circular', 10, 'kruskal') }}
+
 ## Usage
 
 

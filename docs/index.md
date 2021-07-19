@@ -4,6 +4,11 @@ This project provides set of utilities to generate, render, and other kind of st
 [Circular](boards/circular.md), and [Rectangular](boards/rectangular.md) maze boards
 are supported but support for any other board can be added easily.
 
+<div style="display: flex; flex-wrap: wrap; align-items: center;">
+    {{ maze('rectangular', (10, 10), 'kruskal') }}
+    {{ maze('circular', (7, 3), 'kruskal') }}
+</div>
+
 ## Installation
 
 ### via package manager

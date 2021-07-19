@@ -10,8 +10,16 @@ extra:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/nmanumr
 
+extra_javascript:
+  - javascript/index.js
+
 extra_css:
   - stylesheets/extra.css
+
+plugins:
+  - search
+  - macros:
+      module_name: plugins
 
 markdown_extensions:
   - toc:

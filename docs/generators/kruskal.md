@@ -2,6 +2,8 @@
 
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/kruskal.ts)
 
+{{ maze('rectangular', (10, 10), 'kruskal') }}
+
 Begins by assigning each cell to a different set. Randomly links two adjacent cells, but only if they belong to
 different sets. Merges the sets of the two cells. Repeats until only a single set remains.
 

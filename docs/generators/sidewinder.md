@@ -2,6 +2,8 @@
 
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/sidewinder.ts)
 
+{{ maze('rectangular', (10, 10), 'sidewinder') }}
+
 Sequentially, considers a single at a time. Joins all the cells of first row.
 For each other row, links random runs of adjacent cells, and then carve a next row cell from a random cell in each run.
 

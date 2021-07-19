@@ -2,6 +2,8 @@
 
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/aldousBroder.ts)
 
+{{ maze('rectangular', (10, 10), 'aldousBroder') }}
+
 !!! warning
     Aldous Broder's algorithm guarantees to generate unbiased mazes but there is no guarantee that this algorithm
     will not be stuck in an infinite loop. So its recommended not to use this algorithm unless you really known what

@@ -2,6 +2,8 @@
 
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/prim.ts)
 
+{{ maze('rectangular', (10, 10), 'prim') }}
+
 Initializes a set with an arbitrary cell. Randomly chooses a cell from the set. If it has no unvisited neighbors,
 removes it from the set. Otherwise, chooses one of the cell’s unvisited neighbors, links the two together,
 and adds the neighbor to the set. Repeats until the set is not empty.

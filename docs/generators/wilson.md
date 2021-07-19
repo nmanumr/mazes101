@@ -1,6 +1,8 @@
 # Wilson
 [:octicons-file-code-24: Source](https://github.com/nmanumr/mazes101/blob/master/src/generators/wilson.ts)
 
+{{ maze('rectangular', (10, 10), 'wilson') }}
+
 Chooses an arbitrary cell and adds it to the maze. Starting from any other cell, performs a loop-erased random walk
 until encounters a cell belonging to the maze, and then adds the resulting walk. Repeats until all cells have been added.
 
