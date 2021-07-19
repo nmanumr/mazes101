@@ -39,7 +39,9 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
  */
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>): Board {
   if (!fns.getFactor) {
-    fns.getFactor = () => 0.5;
+    // if fns object is freezed, this will make it a normal object.
+    fns = {...fns};
+    fns.getFactor = () => Math.random();
   }
 
   let pathSets: ItemSets<number> = [];

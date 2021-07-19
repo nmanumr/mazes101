@@ -1,5 +1,5 @@
 import {BaseBoard, isEnabled} from "../base.js";
-import {getRandomFrom, getRandomIndexFrom, randomWalk} from "../utils.js";
+import {getRandomFrom} from "../utils.js";
 import {keys} from 'ts-transformer-keys';
 
 /*--------------

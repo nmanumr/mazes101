@@ -43,7 +43,9 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
   let pathSets: ItemSets<number> = [];
 
   if (!fns.getFactor) {
-    fns.getFactor = () => 0.5;
+    // if fns object is freezed, this will make it a normal object.
+    fns = {...fns};
+    fns.getFactor = () => Math.random();
   }
 
   [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns);
