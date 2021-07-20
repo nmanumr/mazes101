@@ -1,4 +1,4 @@
-import {BaseBoard, setInterWallValue} from "../base.js";
+import {BaseBoard, setInterWallValue} from "../base";
 import {PartialExcept} from "../types";
 import {keys} from "ts-transformer-keys";
 

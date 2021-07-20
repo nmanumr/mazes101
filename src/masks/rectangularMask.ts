@@ -1,4 +1,4 @@
-import {BaseBoard, disableCell} from "../base.js";
+import {BaseBoard, disableCell} from "../base";
 
 /*--------------
  * Types

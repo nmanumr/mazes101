@@ -9,7 +9,8 @@
     "**"
   ],
   "scripts": {
-    "build": "rm -rf dist && ttsc && rollup --config",
+    "post-clean": "find dist -type f ! -name 'mazes101.d.ts' -name '**.d.ts' -delete && find dist -empty -type d -delete",
+    "build": "rm -rf dist && rollup --config && npm run post-clean && mv dist/mazes101.d.ts dist/index.d.ts",
     "watch": "ttsc --watch",
     "semantic-release": "semantic-release"
   },
@@ -33,6 +34,7 @@
   "devDependencies": {
     "preact": "^10.5.14",
     "rollup": "^2.47.0",
+    "rollup-plugin-dts": "^3.0.2",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "semantic-release": "^17.4.2",

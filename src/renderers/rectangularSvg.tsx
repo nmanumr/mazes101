@@ -1,5 +1,5 @@
-import {Direction, RectangularBoard, toPosition} from "../boards/rectangular.js";
-import {BoardType, isEnabled} from "../base.js";
+import {Direction, RectangularBoard, toPosition} from "../boards/rectangular";
+import {BoardType, isEnabled} from "../base";
 import {StrH as globalH} from "../h";
 
 interface RendererOptions<T> {

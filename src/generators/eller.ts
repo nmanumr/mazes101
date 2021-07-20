@@ -1,6 +1,6 @@
-import {BaseBoard} from "../base.js";
-import {getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet.js";
-import {getRandomFrom, shuffle} from "../utils.js";
+import {BaseBoard} from "../base";
+import {getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
+import {getRandomFrom, shuffle} from "../utils";
 import {keys} from "ts-transformer-keys";
 
 /*--------------

@@ -1,5 +1,5 @@
-import {CircularBoard, Direction, getRows} from "../boards/circular.js";
-import {BoardType} from "../base.js";
+import {CircularBoard, Direction, getRows} from "../boards/circular";
+import {BoardType} from "../base";
 import {StrH as globalH} from '../h';
 
 interface RendererOptions<T> {

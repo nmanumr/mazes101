@@ -1,8 +1,8 @@
-import {BaseBoard} from "../base.js";
-import {getRandomFrom, shuffle} from "../utils.js";
+import {BaseBoard} from "../base";
+import {getRandomFrom, shuffle} from "../utils";
 import {keys} from "ts-transformer-keys";
 import {ItemSets} from "./_pathSet";
-import {visitRow} from './eller.js';
+import {visitRow} from './eller';
 
 /*--------------
  * Types
