@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.esm.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "composite": true,
+    "module": "es2015",
+    "target": "esnext",
+    "removeComments": false,
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "../dist/types",
+    "emitDeclarationOnly": true
+  },
+  "exclude": ["./docs.ts"]
+}
