@@ -6,7 +6,7 @@ import * as rectangular from './boards/rectangular';
 import * as circular from './boards/circular';
 import generators from './generators';
 import renderers from './renderers';
-import {DomH} from "./h";
+import {DomH} from "./h/dom";
 
 let mazeEls = Array.from(document.querySelectorAll<HTMLDivElement>('[data-maze]'));
 

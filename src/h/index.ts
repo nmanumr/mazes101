@@ -7,7 +7,7 @@ const attrMap = new Map([
   ['viewBox', 'view=Box'],
 ]);
 
-function normalizeAttr(attr: string) {
+export function normalizeAttr(attr: string) {
   if (attrMap.has(attr)) attr = attrMap.get(attr) as string;
 
   return attr.split('').map((letter, idx) => {
