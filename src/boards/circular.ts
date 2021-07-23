@@ -170,7 +170,7 @@ export function toPosition(index: number, {size}: PartialExcept<CircularBoard, '
  */
 export function getRows({size}: CircularBoard): number[][] {
   const nodeCounts = getRingNodeCount(size.radius).slice(size.innerRadius);
-  let sum = 0, rows = [];
+  let sum = 0, rows: number[][] = [];
   for (let count of nodeCounts) {
     rows.push(Array.from(new Array(count), (_, i) => sum + i));
     sum += count;
@@ -192,7 +192,7 @@ export function getNeighbours(index: number, {size}: CircularBoard) {
 
   const r = nodeCountSum.findIndex((val) => val > index) - 1;
   const t = index - nodeCountSum[r];
-  let neighbours = [];
+  let neighbours: number[] = [];
 
   if (r < (size.radius - size.innerRadius - 1)) {
     if (nodeCount[r] < nodeCount[r + 1]) {

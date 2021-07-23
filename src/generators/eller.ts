@@ -37,12 +37,8 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
  *
  * Ref: https://weblog.jamisbuck.org/2010/12/29/maze-generation-eller-s-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>): Board {
-  if (!fns.getFactor) {
-    // if fns object is freezed, this will make it a normal object.
-    fns = {...fns};
-    fns.getFactor = () => Math.random();
-  }
+export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunctions<Board>): Board {
+  let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
 
   let pathSets: ItemSets<number> = [];
   const rows = fns.getRows(board);
@@ -76,7 +72,7 @@ export function visitRow<Board extends BaseBoard>(
   mergeAll: boolean,
   board: Board,
   pathSets: ItemSets<number>,
-  fns: BoardFunctions<Board>
+  fns: Required<BoardFunctions<Board>>
 ): [Board, ItemSets<number>] {
   for (let i = 1; i < row.length; i++) {
     if (getItemSet(row[i - 1], pathSets) == null) {
@@ -109,7 +105,7 @@ export function connectToOtherRow<Board extends BaseBoard>(
   nextRow: number[],
   board: Board,
   pathSets: ItemSets<number>,
-  fns: BoardFunctions<Board>
+  fns: Required<BoardFunctions<Board>>
 ): [Board, ItemSets<number>] {
   for (let set of pathSets) {
     let rowCells = Array.from(set).filter((index) => row.includes(index));

@@ -140,7 +140,7 @@ export function getRelativePosition({x, y}: Position, direction: Direction) {
  * Get neighbour cells of the given position
  */
 export function getNeighbours(index: number, {cells, size}: RectangularBoard): number[] {
-  let neighboursCells = [];
+  let neighboursCells: number[] = [];
 
   // TOP
   if (index >= size.width) { neighboursCells.push(index - size.width); }
@@ -162,7 +162,7 @@ export function getNeighbours(index: number, {cells, size}: RectangularBoard): n
  * if visitableOnly is false then it only check nif neighbour is enabled or not
  */
 export function getAllowedDirection({x, y}: Position, {cells, size}: RectangularBoard, visitableOnly = true) {
-  let directions = [];
+  let directions: Direction[] = [];
 
   if (y > 0) directions.push(Direction.TOP);
   if (x < size.width - 1) directions.push(Direction.RIGHT);
@@ -201,7 +201,7 @@ export function getRows({cells, size}: RectangularBoard): number[][] {
 
       acc[acc.length - 1].push(item);
       return acc;
-    }, [])
+    }, [] as number[][])
     // don't allow any disabled cell
     .map((row) => row.filter((c) => isEnabled(cells[c])))
     // ignore empty rows

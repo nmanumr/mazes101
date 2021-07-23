@@ -11,7 +11,7 @@ import {DomH} from "./h";
 let mazeEls = Array.from(document.querySelectorAll<HTMLDivElement>('[data-maze]'));
 
 for (let mazeEl of mazeEls) {
-  let data = JSON.parse(mazeEl.dataset.maze);
+  let data = JSON.parse(mazeEl.dataset.maze || '{}');
 
   if (data.board === "rectangular") {
     let board = rectangular.newBoard({width: data.size[0], height: data.size[1]});

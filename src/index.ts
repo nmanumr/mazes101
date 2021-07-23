@@ -6,7 +6,7 @@ import Renderers from './renderers';
 import * as RectangularMask from './masks/rectangularMask'
 import * as MovesRegister from './movesRegister';
 
-export {
+export default {
   baseBoard,
   Boards,
   Generators,

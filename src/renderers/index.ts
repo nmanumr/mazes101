@@ -1,6 +1,6 @@
 import * as circularSvg from './circularSvg';
 import * as rectangularSvg from './rectangularSvg';
 
-export {
+export default {
   circularSvg, rectangularSvg
 }

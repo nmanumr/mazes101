@@ -2,6 +2,7 @@ import {BaseBoard, isEnabled} from "../base";
 import {getRandomFrom} from "../utils";
 import {keys} from 'ts-transformer-keys';
 import * as MovesRegister from '../movesRegister';
+import {PartialExcept} from "../types";
 
 /*--------------
  * Types
@@ -24,11 +25,12 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 /**
  * Generates maze using BackTrace maze generation Algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>, movesRegister?: typeof MovesRegister) {
-  if (!movesRegister) {
-    // @ts-ignore
-    movesRegister = {Type: {}, register: (...args) => undefined}
-  }
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  fns: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+) {
 
   movesRegister.register(movesRegister.Type.RESET_MOVES);
   let visitableCells = Array.from(board.cells)
@@ -56,7 +58,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
 
       movesRegister.register(movesRegister.Type.APPEND_CELL_GROUP, {id: 0, cellIdx: randomCell});
     } else {
-      let id = pathStack.pop();
+      let id = pathStack.pop() as number;
       movesRegister.register(movesRegister.Type.POP_CELL_GROUP, {id: 0, cellIdx: id});
     }
   }

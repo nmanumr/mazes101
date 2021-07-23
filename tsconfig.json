@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "strictNullChecks": true,
+    "incremental": true,
     "declaration": false,
     "outDir": "dist",
     "module": "ESNext",
@@ -7,15 +9,16 @@
     "target": "ES2019",
     "jsx": "react",
     "jsxFactory": "h",
+    "removeComments": true,
+    "sourceMap": true,
     "plugins": [
-      { "transform": "ts-transformer-keys/transformer" }
+      {
+        "transform": "ts-transformer-keys/transformer"
+      }
     ],
     "lib": [
       "ES2019",
       "dom"
     ]
-  },
-  "include": [
-    "src/**/*.ts"
-  ]
+  }
 }

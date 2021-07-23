@@ -5,7 +5,7 @@ import {StrH as globalH} from '../h';
 interface RendererOptions<T> {
   cellSize: number;
   lineWidth: number;
-  h?: (tag: string, attributes: Record<string, string>, ...children: Array<any>) => T;
+  h: (tag: string, attributes: Record<string, string>, ...children: Array<any>) => T;
 }
 
 const defaultOptions: RendererOptions<string> = {
@@ -15,13 +15,13 @@ const defaultOptions: RendererOptions<string> = {
 }
 
 export function render<T = string>(board: CircularBoard, options: Partial<RendererOptions<T>> = {}): T {
-  options = {...defaultOptions, ...options} as RendererOptions<T>;
+  let opts: RendererOptions<T> = {...defaultOptions, ...options} as RendererOptions<T>;
 
   const innerRadius = board.size.innerRadius;
-  const radiusOffset = (1 - innerRadius) * options.cellSize * 0.75;
-  const radius = options.cellSize * (board.size.radius - board.size.innerRadius) + radiusOffset + innerRadius * options.cellSize;
+  const radiusOffset = (1 - innerRadius) * opts.cellSize * 0.75;
+  const radius = opts.cellSize * (board.size.radius - board.size.innerRadius) + radiusOffset + innerRadius * opts.cellSize;
 
-  const canvasSize = radius * 2 + options.lineWidth;
+  const canvasSize = radius * 2 + opts.lineWidth;
   const center = canvasSize / 2;
 
   let rows = getRows(board);
@@ -32,8 +32,8 @@ export function render<T = string>(board: CircularBoard, options: Partial<Render
       const cell = board.cells[rows[r - innerRadius][i]];
 
       const cellArc = 2 * Math.PI / rows[r - innerRadius].length;
-      const innerArcRadius = r * options.cellSize + radiusOffset;
-      const outerArcRadius = innerArcRadius + options.cellSize;
+      const innerArcRadius = r * opts.cellSize + radiusOffset;
+      const outerArcRadius = innerArcRadius + opts.cellSize;
       const theta1 = cellArc * i;
       const theta2 = theta1 + cellArc;
 
@@ -59,12 +59,17 @@ export function render<T = string>(board: CircularBoard, options: Partial<Render
     }
   }
 
-  const h = options.h;
-  return (
-    <svg stroke="currentColor" fill="none" width={canvasSize} height={canvasSize}
-         viewbox={`0 0 ${canvasSize} ${canvasSize}`}>
-      <path d={path} strokeWidth={options.lineWidth} strokeLinecap="round"/>
-    </svg>
+  const h = opts.h;
+  return h(
+    "svg",
+    {
+      stroke: "currentColor",
+      fill: "none",
+      width: `${canvasSize}px`,
+      height: `${canvasSize}px`,
+      viewBox: `0 0 ${canvasSize} ${canvasSize}`
+    },
+    h("path", {d: path, strokeWidth: `${options.lineWidth}px`, strokeLinecap: "round"})
   );
 }
 

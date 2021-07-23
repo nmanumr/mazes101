@@ -6,7 +6,7 @@ import * as kruskal from './kruskal';
 import * as prim from './prim';
 import * as sidewinder from './sidewinder';
 
-export {
+export default {
   aldousBroder,
   backtrack,
   eller,

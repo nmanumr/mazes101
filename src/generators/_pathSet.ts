@@ -3,7 +3,7 @@ export type ItemSets<T> = Array<Set<T>>;
 /**
  * Get set from which item belongs to
  */
-export function getItemSet<T>(item: T, itemSets: ItemSets<T>): Set<T> {
+export function getItemSet<T>(item: T, itemSets: ItemSets<T>): Set<T> | undefined {
   return itemSets.find((set) => set.has(item));
 }
 
@@ -18,10 +18,10 @@ export function joinItemSets<T>(item1: T, item2: T, itemSets: ItemSets<T>): Item
   if (!set1 && !set2) {
     // if both item doesn't belong to any set create new set and push it to itemSets
     newItemSets.push(new Set([item1, item2]));
-  } else if (set1 == null) {
+  } else if (!set1) {
     // if item1 doesn't belong to any set add it to set 2
-    set2.add(item1);
-  } else if (set2 == null) {
+    set2?.add(item1);
+  } else if (!set2) {
     // if item2 doesn't belong to any set add it to set 1
     set1.add(item2);
   } else if (set1 != set2) {
