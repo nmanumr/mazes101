@@ -22,7 +22,7 @@ export function StrH(tag: string, attributes: Attributes | null, ...children: Ch
         }
         return `${normalizeAttr(key)}="${val}"`;
     }).join(' ');
-    let childStr = children.map((child) => child.toString()).join('');
+    let childStr = children.map((child) => (child ?? '').toString()).join('');
     if (childStr) {
         if (attrStr) {
             return `<${tag} ${attrStr}>${childStr}</${tag}>`;
