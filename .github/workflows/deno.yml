@@ -23,10 +23,11 @@ jobs:
       - name: Copy extra files
         run: cp {LICENSE,README.md} dist/deno
 
-      - name: Test Deno
-        uses: denoland/setup-deno@v1
+      - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+
+      - name: Test Deno
         run: deno run dist/deno/index.ts
 
       - name: Push to deno branch
