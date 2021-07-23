@@ -69,7 +69,7 @@ export function render<T = string>(board: CircularBoard, options: Partial<Render
       height: `${canvasSize}px`,
       viewBox: `0 0 ${canvasSize} ${canvasSize}`
     },
-    h("path", {d: path, strokeWidth: `${options.lineWidth}px`, strokeLinecap: "round"})
+    h("path", {d: path, strokeWidth: `${opts.lineWidth}px`, strokeLinecap: "round"})
   );
 }
 

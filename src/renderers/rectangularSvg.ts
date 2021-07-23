@@ -59,8 +59,8 @@ export function render<T = string>(board: RectangularBoard, options: Partial<Ren
       height: `${height}px`,
       viewBox: `0 0 ${width} ${height}`
     },
-    options.renderDisabled && h('path', {d: p2, className: 'disabledPath'}),
-    h('path', {d: path, strokeWidth: `${options.lineWidth}px`, strokeLinecap:'round'})
+    opts.renderDisabled && h('path', {d: p2, className: 'disabledPath'}),
+    h('path', {d: path, strokeWidth: `${opts.lineWidth}px`, strokeLinecap:'round'})
   );
 }
 
