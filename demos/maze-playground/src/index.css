@@ -1,0 +1,23 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+body, input {
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    font-feature-settings: "kern", "liga";
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    background-color: #f7f7f7;
+}
+
+@layer base {
+    select, input[type="number"] {
+        @apply border-l-0 border-t-0 border-r-0 border-b border-gray-300 py-1.5 pl-1.5 w-full bg-transparent;
+        @apply focus:outline-none focus:border-gray-600;
+        box-shadow: none!important;
+    }
+}
+
