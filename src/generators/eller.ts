@@ -2,6 +2,8 @@ import {BaseBoard} from "../base";
 import {getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
 import {getRandomFrom, shuffle} from "../utils";
 import {keys} from "ts-transformer-keys";
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -37,7 +39,13 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
  *
  * Ref: https://weblog.jamisbuck.org/2010/12/29/maze-generation-eller-s-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunctions<Board>): Board {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  funcs: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+): Board {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
   let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
 
   let pathSets: ItemSets<number> = [];

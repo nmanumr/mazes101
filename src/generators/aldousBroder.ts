@@ -1,6 +1,8 @@
 import {BaseBoard} from "../base";
 import {getRandomIndexFrom} from "../utils";
 import {keys} from "ts-transformer-keys";
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -28,7 +30,13 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
  * NOTE: don't using this algorithm for any real maze generation. theoretically, it can
  * take forever to generate any reasonable sized maze.
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>): Board {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  fns: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+): Board {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
   let visitedCells = new Set();
   let currentCell = getRandomIndexFrom(board.cells);
   visitedCells.add(currentCell);

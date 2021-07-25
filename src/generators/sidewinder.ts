@@ -3,6 +3,8 @@ import {getRandomFrom, shuffle} from "../utils";
 import {keys} from "ts-transformer-keys";
 import {ItemSets} from "./_pathSet";
 import {visitRow} from './eller';
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -38,7 +40,13 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
  *
  * Ref: https://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunctions<Board>) {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  funcs:BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+) {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
   let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
 
   let rows = fns.getRows(board);

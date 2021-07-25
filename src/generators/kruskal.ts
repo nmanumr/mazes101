@@ -2,6 +2,8 @@ import {BaseBoard, isEnabled} from "../base";
 import {getRandomIndexFrom, getRandomFrom} from "../utils";
 import {isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
 import {keys} from "ts-transformer-keys";
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -27,7 +29,13 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
  *
  * Ref: https://weblog.jamisbuck.org/2011/1/3/maze-generation-kruskal-s-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  fns: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+) {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
   let pathSets: ItemSets<number> = [];
   let visited = new Set();
   let visitableCells = 0;
