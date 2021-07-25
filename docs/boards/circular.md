@@ -1,6 +1,6 @@
 # Circular Board
 
-{{ maze('circular', 10, 'kruskal') }}
+{{ maze('circular', 10, 'backtrack') }}
 
 ## Usage
 

@@ -6,7 +6,7 @@ are supported but support for any other board can be added easily.
 
 <div style="display: flex; flex-wrap: wrap; align-items: center;">
     {{ maze('rectangular', (10, 10), 'kruskal') }}
-    {{ maze('circular', (7, 3), 'kruskal') }}
+    {{ maze('circular', (7, 3), 'backtrack') }}
 </div>
 
 ## Installation
