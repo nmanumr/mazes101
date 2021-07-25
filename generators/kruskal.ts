@@ -1,12 +1,15 @@
 import { BaseBoard, isEnabled } from "../base.ts";
 import { getRandomIndexFrom, getRandomFrom } from "../utils.ts";
 import { isFromSameSet, ItemSets, joinItemSets } from "./_pathSet.ts";
+import { PartialExcept } from "../types.ts";
+import * as MovesRegister from "../movesRegister.ts";
 interface BoardFunctions<Board extends BaseBoard> {
     removeInterWall(index1: number, index2: number, board: Board): Board;
     getNeighbours(index: number, board: Board): number[];
 }
 export const _required_fns = ["removeInterWall", "getNeighbours"];
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
+export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>, movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'> = { register: (...args) => undefined, Type: MovesRegister.Type }) {
+    movesRegister.register(movesRegister.Type.RESET_MOVES);
     let pathSets: ItemSets<number> = [];
     let visited = new Set();
     let visitableCells = 0;

@@ -1,6 +1,8 @@
 import { BaseBoard } from "../base.ts";
 import { getItemSet, isFromSameSet, ItemSets, joinItemSets } from "./_pathSet.ts";
 import { getRandomFrom, shuffle } from "../utils.ts";
+import { PartialExcept } from "../types.ts";
+import * as MovesRegister from "../movesRegister.ts";
 interface BoardFunctions<Board extends BaseBoard> {
     getRows(board: Board): number[][];
     removeInterWall(index1: number, index2: number, board: Board): Board;
@@ -8,7 +10,8 @@ interface BoardFunctions<Board extends BaseBoard> {
     getFactor?(rowIndex: number): number;
 }
 export const _required_fns = ["getRows", "removeInterWall", "getNeighbours"];
-export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunctions<Board>): Board {
+export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunctions<Board>, movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'> = { register: (...args) => undefined, Type: MovesRegister.Type }): Board {
+    movesRegister.register(movesRegister.Type.RESET_MOVES);
     let fns: Required<BoardFunctions<Board>> = { getFactor: () => Math.random(), ...funcs };
     let pathSets: ItemSets<number> = [];
     const rows = fns.getRows(board);

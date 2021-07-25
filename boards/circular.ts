@@ -153,7 +153,6 @@ export function getNeighbours(index: number, { size }: CircularBoard) {
     else {
         neighbours.push(index - nodeCount[r] + 1);
     }
-    console.log("here");
     return neighbours;
 }
 export function removeInterWall(index1: number, index2: number, board: CircularBoard): CircularBoard {
