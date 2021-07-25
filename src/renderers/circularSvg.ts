@@ -21,7 +21,7 @@ export function render<T = string>(board: CircularBoard, options: Partial<Render
   const radiusOffset = (1 - innerRadius) * opts.cellSize * 0.75;
   const radius = opts.cellSize * (board.size.radius - board.size.innerRadius) + radiusOffset + innerRadius * opts.cellSize;
 
-  const canvasSize = radius * 2 + opts.lineWidth;
+  const canvasSize = radius * 2 + opts.lineWidth + opts.cellSize*2;
   const center = canvasSize / 2;
 
   let rows = getRows(board);
