@@ -22,12 +22,10 @@ export const _size_params = ["radius", "innerRadius"];
 function sum(nums: number[]) {
     return Array.from(nums).reduce((s, i) => s + i, 0);
 }
-export function newBoard({ radius, innerRadius }: {
+export function newBoard({ radius, innerRadius = 3 }: {
     radius: number;
-    innerRadius: number;
+    innerRadius?: number;
 }): CircularBoard {
-    if (!innerRadius)
-        innerRadius = 3;
     const nodeCount = getRingNodeCount(radius);
     const totalNodes = sum(nodeCount.slice(innerRadius));
     return {
@@ -63,8 +61,12 @@ export function getRelativeDirection(index1: number, index2: number, { size }: P
         return Direction.BOTTOM;
     if (pos1.r === pos2.r && pos1.t + 1 === pos2.t)
         return Direction.RIGHT;
+    if (pos1.r === pos2.r && pos1.t < pos2.t && pos1.t === 0)
+        return Direction.LEFT;
     if (pos1.r === pos2.r && pos1.t - 1 === pos2.t)
         return Direction.LEFT;
+    if (pos1.r === pos2.r && pos1.t > pos2.t && pos2.t === 0)
+        return Direction.RIGHT;
     if (pos1.r + 1 === pos2.r && index1 % 2 === 0)
         return Direction.TOP_CW;
     if (pos1.r + 1 === pos2.r && index1 % 2 === 1)
@@ -132,6 +134,9 @@ export function getNeighbours(index: number, { size }: CircularBoard) {
     if (t > 0) {
         neighbours.push(index - 1);
     }
+    else {
+        neighbours.push(index + nodeCount[r] - 1);
+    }
     if (r > 0) {
         let cellIndex;
         if (nodeCount[r] > nodeCount[r - 1]) {
@@ -145,6 +150,10 @@ export function getNeighbours(index: number, { size }: CircularBoard) {
     if (t < nodeCount[r] - 1) {
         neighbours.push(index + 1);
     }
+    else {
+        neighbours.push(index - nodeCount[r] + 1);
+    }
+    console.log("here");
     return neighbours;
 }
 export function removeInterWall(index1: number, index2: number, board: CircularBoard): CircularBoard {
