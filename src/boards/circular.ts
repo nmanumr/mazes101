@@ -228,7 +228,6 @@ export function getNeighbours(index: number, {size}: CircularBoard) {
     neighbours.push(index - nodeCount[r] + 1);
   }
 
-  console.log("here");
   return neighbours;
 }
 
