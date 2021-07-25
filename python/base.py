@@ -7,6 +7,9 @@ class Cell:
     def is_enabled(self):
         return (self.val & (1 << 7)) == 0
 
+    def enable(self):
+        self.val = self.val & (0 << 7)
+
     def disable(self):
         self.val = self.val | (1 << 7)
 
@@ -33,19 +36,20 @@ class BaseBoard:
     def __init__(self, size, board_type):
         self.cells = [Cell() for _ in range(size)]
         self.board_type = board_type
+        self.size = size
 
     def disable_cells(self, indexes):
         for index in indexes:
             self.cells[index].disable()
 
     def relative_direction_fn(self, index1, index2):
-        raise NotImplementedError
+        raise NotImplementedError("Subclasses should implement this!")
 
     def opposing_wall_fn(self, dir):
-        raise NotImplementedError
+        raise NotImplementedError("Subclasses should implement this!")
 
     def cell_value_fn(self, cell, dir):
-        raise NotImplementedError
+        raise NotImplementedError("Subclasses should implement this!")
 
     def has_inter_wall(self, index1, index2):
         cell1_dir = self.relative_direction_fn(index1, index2)
