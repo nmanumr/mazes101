@@ -42,8 +42,7 @@ function sum(nums: number[]) {
 /**
  * Returns a new CircularBoard for the given size
  */
-export function newBoard({radius, innerRadius}: {radius: number, innerRadius: number}): CircularBoard {
-  if (!innerRadius) innerRadius = 3;
+export function newBoard({radius, innerRadius = 3}: { radius: number, innerRadius?: number }): CircularBoard {
   const nodeCount = getRingNodeCount(radius);
   const totalNodes = sum(nodeCount.slice(innerRadius));
 
@@ -113,7 +112,9 @@ export function getRelativeDirection(index1: number, index2: number, {size}: Par
 
   if (pos1.r - 1 === pos2.r) return Direction.BOTTOM;
   if (pos1.r === pos2.r && pos1.t + 1 === pos2.t) return Direction.RIGHT;
+  if (pos1.r === pos2.r && pos1.t < pos2.t && pos1.t === 0) return Direction.LEFT;
   if (pos1.r === pos2.r && pos1.t - 1 === pos2.t) return Direction.LEFT;
+  if (pos1.r === pos2.r && pos1.t > pos2.t && pos2.t === 0) return Direction.RIGHT;
 
   // Here is a trick to check if pos2 is in clock-wise or counter clock-wise top direction
   // I just observed that clockwise top cells always have even index
@@ -205,20 +206,29 @@ export function getNeighbours(index: number, {size}: CircularBoard) {
     }
   }
   // RIGHT
-  if (t > 0) { neighbours.push(index - 1); }
+  if (t > 0) {
+    neighbours.push(index - 1);
+  } else {
+    neighbours.push(index + nodeCount[r] - 1);
+  }
   // BOTTOM
   if (r > 0) {
     let cellIndex;
     if (nodeCount[r] > nodeCount[r - 1]) {
       cellIndex = toIndex({r: r - 1, t: Math.floor(t / 2)}, {size});
     } else {
-      cellIndex =  toIndex({r: r - 1, t}, {size});
+      cellIndex = toIndex({r: r - 1, t}, {size});
     }
     neighbours.push(cellIndex);
   }
   // LEFT
-  if (t < nodeCount[r] - 1) { neighbours.push(index + 1); }
+  if (t < nodeCount[r] - 1) {
+    neighbours.push(index + 1);
+  } else {
+    neighbours.push(index - nodeCount[r] + 1);
+  }
 
+  console.log("here");
   return neighbours;
 }
 
