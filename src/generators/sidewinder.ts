@@ -50,7 +50,7 @@ export function generate<Board extends BaseBoard>(
   let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
 
   let rows = fns.getRows(board);
-  let pathSets: ItemSets<number> = [];
+  let pathSets: ItemSets<number> = {};
 
   if (!fns.getFactor) {
     // if fns object is freezed, this will make it a normal object.
@@ -58,10 +58,10 @@ export function generate<Board extends BaseBoard>(
     fns.getFactor = () => Math.random();
   }
 
-  [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns);
+  [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns, movesRegister);
 
   for (let i = 1; i < rows.length; i++) {
-    [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns);
+    [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns, movesRegister);
     [board, pathSets] = connectToOtherRow(rows[i], rows[i - 1], board, pathSets, fns);
   }
 
@@ -76,7 +76,7 @@ export function connectToOtherRow<Board extends BaseBoard>(
   pathSets: ItemSets<number>,
   fns: BoardFunctions<Board>
 ): [Board, ItemSets<number>] {
-  for (let set of pathSets) {
+  for (let [id, set] of Object.entries(pathSets)) {
     let rowCells = Array.from(set).filter((index) => row.includes(index));
     rowCells = shuffle(rowCells);
 

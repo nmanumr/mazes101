@@ -1,7 +1,7 @@
 import {Direction, RectangularBoard, toPosition} from "../boards/rectangular";
 import {BoardType} from "../base";
 import {StrH as globalH} from "../h";
-import {fillColor, findCellPathId, getColors} from "./utils";
+import {fillColor, findCellPathId} from "./utils";
 
 interface RendererOptions<T> {
   cellSize: number;

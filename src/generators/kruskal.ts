@@ -1,6 +1,6 @@
 import {BaseBoard, isEnabled} from "../base";
 import {getRandomIndexFrom, getRandomFrom} from "../utils";
-import {isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
+import {addItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
 import {keys} from "ts-transformer-keys";
 import {PartialExcept} from "../types";
 import * as MovesRegister from "../movesRegister";
@@ -36,13 +36,13 @@ export function generate<Board extends BaseBoard>(
     = {register: (...args) => undefined, Type: MovesRegister.Type}
 ) {
   movesRegister.register(movesRegister.Type.RESET_MOVES);
-  let pathSets: ItemSets<number> = [];
+  let pathSets: ItemSets<number> = {};
   let visited = new Set();
   let visitableCells = 0;
 
   for (let i = 0; i < board.cells.length; i++) {
     if (!isEnabled(board.cells[i])) continue;
-    pathSets.push(new Set([i]));
+    let [id, _] = addItemSet(i, pathSets);
     visitableCells++;
   }
 

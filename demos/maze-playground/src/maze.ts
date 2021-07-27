@@ -199,7 +199,10 @@ export function useMaze({selectedBoard, selectedGenerator, selectedRenderer, siz
       [newBoard, newPaths] = MovesRegister.applyMove(newBoard as any, newPaths, moves[i], BoardModule);
     }
 
-    let renderedBoard = (Renderers as any)[selectedRenderer].render(newBoard, {h: React.createElement, paths: newPaths});
+    let renderedBoard = (Renderers as any)[selectedRenderer].render(newBoard, {
+      h: React.createElement,
+      paths: newPaths
+    });
     setRenderedBoard(renderedBoard);
     setBoard(newBoard);
   }, [step]);

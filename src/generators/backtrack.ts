@@ -42,7 +42,7 @@ export function generate<Board extends BaseBoard>(
   visitedCells.add(currentCell);
   let pathStack = [currentCell];
 
-  movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id: 0, cellIdx: currentCell});
+  movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id: 0, cell: currentCell});
 
   while (pathStack.length !== 0) {
     currentCell = pathStack[pathStack.length - 1];
@@ -57,11 +57,11 @@ export function generate<Board extends BaseBoard>(
       pathStack.push(randomCell);
 
       movesRegister.register(movesRegister.Type.APPEND_CELL_GROUP, {
-        id: 0, cellIdx: randomCell, neighbourCell: currentCell
+        id: 0, cell: randomCell, neighbourCell: currentCell
       });
     } else {
       let id = pathStack.pop() as number;
-      movesRegister.register(movesRegister.Type.POP_CELL_GROUP, {id: 0, cellIdx: id});
+      movesRegister.register(movesRegister.Type.POP_CELL_GROUP, {id: 0, cell: id});
     }
   }
 

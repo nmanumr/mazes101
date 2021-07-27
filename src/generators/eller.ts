@@ -1,5 +1,5 @@
 import {BaseBoard} from "../base";
-import {getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
+import {addItemSet, getItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
 import {getRandomFrom, shuffle} from "../utils";
 import {keys} from "ts-transformer-keys";
 import {PartialExcept} from "../types";
@@ -48,22 +48,25 @@ export function generate<Board extends BaseBoard>(
   movesRegister.register(movesRegister.Type.RESET_MOVES);
   let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
 
-  let pathSets: ItemSets<number> = [];
+  let pathSets: ItemSets<number> = {};
   const rows = fns.getRows(board);
 
   // create pathSet for each cell in first row
   for (let index of rows[0]) {
-    pathSets.push(new Set([index]));
+    let [id, _] = addItemSet(index, pathSets);
+    movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id, cell: index});
   }
 
   for (let i = 0; i < rows.length - 1; i++) {
     let row = rows[i];
-    [board, pathSets] = visitRow(row, i, false, board, pathSets, fns);
-    [board, pathSets] = connectToOtherRow(row, rows[i + 1], board, pathSets, fns);
+    [board, pathSets] = visitRow(row, i, false, board, pathSets, fns, movesRegister);
+    [board, pathSets] = connectToOtherRow(row, rows[i + 1], board, pathSets, fns, movesRegister);
   }
 
-  [board, pathSets] = visitRow(rows[rows.length - 1], rows.length - 1, true, board, pathSets, fns);
+  [board, pathSets] = visitRow(rows[rows.length - 1], rows.length - 1, true, board, pathSets, fns, movesRegister);
   // TODO: if pathSets have length greater than 1 try to merge the path sets
+
+  movesRegister.register(movesRegister.Type.CLEAR_CELL_GROUPS);
   return board;
 }
 
@@ -80,14 +83,17 @@ export function visitRow<Board extends BaseBoard>(
   mergeAll: boolean,
   board: Board,
   pathSets: ItemSets<number>,
-  fns: Required<BoardFunctions<Board>>
+  fns: Required<BoardFunctions<Board>>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
 ): [Board, ItemSets<number>] {
   for (let i = 1; i < row.length; i++) {
     if (getItemSet(row[i - 1], pathSets) == null) {
-      pathSets.push(new Set([row[i - 1]]));
+      let [id, _] = addItemSet(row[i - 1], pathSets);
+      movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id, cell: row[i - 1]});
     }
     if (getItemSet(row[i], pathSets) == null) {
-      pathSets.push(new Set([row[i]]));
+      let [id, _] = addItemSet(row[i], pathSets);
+      movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id, cell: row[i]});
     }
 
     // check if cells are neighbours
@@ -101,6 +107,7 @@ export function visitRow<Board extends BaseBoard>(
     if (Math.random() > fns.getFactor(rowIndex) || mergeAll) {
       board = fns.removeInterWall(row[i - 1], row[i], board);
       pathSets = joinItemSets(row[i - 1], row[i], pathSets);
+      movesRegister.register(movesRegister.Type.MERGE_CELL_GROUP, {cell1: row[i - 1], cell2: row[i]});
     }
   }
 
@@ -113,9 +120,10 @@ export function connectToOtherRow<Board extends BaseBoard>(
   nextRow: number[],
   board: Board,
   pathSets: ItemSets<number>,
-  fns: Required<BoardFunctions<Board>>
+  fns: Required<BoardFunctions<Board>>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
 ): [Board, ItemSets<number>] {
-  for (let set of pathSets) {
+  for (let [id, set] of Object.entries(pathSets)) {
     let rowCells = Array.from(set).filter((index) => row.includes(index));
 
     rowCells = shuffle(rowCells);
@@ -130,6 +138,9 @@ export function connectToOtherRow<Board extends BaseBoard>(
       }
       board = fns.removeInterWall(cell, nextCell, board);
       set.add(nextCell);
+
+      console.log(id, nextCell);
+      movesRegister.register(movesRegister.Type.APPEND_CELL_GROUP, {id, cell: nextCell, neighbourCell: cell});
     }
   }
 
