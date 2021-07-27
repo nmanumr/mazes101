@@ -15,14 +15,14 @@ export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunc
     movesRegister.register(movesRegister.Type.RESET_MOVES);
     let fns: Required<BoardFunctions<Board>> = { getFactor: () => Math.random(), ...funcs };
     let rows = fns.getRows(board);
-    let pathSets: ItemSets<number> = [];
+    let pathSets: ItemSets<number> = {};
     if (!fns.getFactor) {
         fns = { ...fns };
         fns.getFactor = () => Math.random();
     }
-    [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns);
+    [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns, movesRegister);
     for (let i = 1; i < rows.length; i++) {
-        [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns);
+        [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns, movesRegister);
         [board, pathSets] = connectToOtherRow(rows[i], rows[i - 1], board, pathSets, fns);
     }
     return board;
@@ -31,7 +31,7 @@ export function connectToOtherRow<Board extends BaseBoard>(row: number[], nextRo
     Board,
     ItemSets<number>
 ] {
-    for (let set of pathSets) {
+    for (let [id, set] of Object.entries(pathSets)) {
         let rowCells = Array.from(set).filter((index) => row.includes(index));
         rowCells = shuffle(rowCells);
         let cell = getRandomFrom(rowCells);

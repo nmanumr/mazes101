@@ -1,6 +1,6 @@
 import { BaseBoard, isEnabled } from "../base.ts";
 import { getRandomIndexFrom, getRandomFrom } from "../utils.ts";
-import { isFromSameSet, ItemSets, joinItemSets } from "./_pathSet.ts";
+import { addItemSet, isFromSameSet, ItemSets, joinItemSets } from "./_pathSet.ts";
 import { PartialExcept } from "../types.ts";
 import * as MovesRegister from "../movesRegister.ts";
 interface BoardFunctions<Board extends BaseBoard> {
@@ -10,13 +10,13 @@ interface BoardFunctions<Board extends BaseBoard> {
 export const _required_fns = ["removeInterWall", "getNeighbours"];
 export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>, movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'> = { register: (...args) => undefined, Type: MovesRegister.Type }) {
     movesRegister.register(movesRegister.Type.RESET_MOVES);
-    let pathSets: ItemSets<number> = [];
+    let pathSets: ItemSets<number> = {};
     let visited = new Set();
     let visitableCells = 0;
     for (let i = 0; i < board.cells.length; i++) {
         if (!isEnabled(board.cells[i]))
             continue;
-        pathSets.push(new Set([i]));
+        let [id, _] = addItemSet(i, pathSets);
         visitableCells++;
     }
     while (visited.size < visitableCells) {
