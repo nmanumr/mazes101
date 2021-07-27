@@ -28,10 +28,10 @@ export function disableCells<Board extends BaseBoard>(indexes: number[], board: 
     return { ...board, cells };
 }
 export function removeAllWall(cell: number): number {
-    return !isEnabled(cell) ? cell : cell | 127;
+    return !isEnabled(cell) ? 255 : cell | 127;
 }
 export function setAllWalls(cell: number): number {
-    return !isEnabled(cell) ? cell : cell & 0;
+    return !isEnabled(cell) ? cell & 128 : cell & 0;
 }
 export function hasCellWall(cell: number, wall: number): boolean {
     return !isEnabled(cell) || (cell & 1 << wall) === 0;
