@@ -61,7 +61,11 @@ export function useField(
   return {
     id, type, value: state,
     onChange: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-      setState(e.target.value);
+      if (!isNaN(e.target.value as any)) {
+        setState(+e.target.value);
+      } else {
+        setState(e.target.value);
+      }
     }
   }
 }
@@ -116,23 +120,95 @@ interface UseMazeOptions {
   selectedBoard: string;
   selectedGenerator: string;
   selectedRenderer: string;
-  size: {width: number, height: number} | {radius: number, innerRadius: number},
+  size: { width: number, height: number } | { radius: number, innerRadius: number },
+
   [key: string]: any;
 }
 
 export function useMaze({selectedBoard, selectedGenerator, selectedRenderer, size}: UseMazeOptions) {
   const [board, setBoard] = useState();
+  const [renderedBoard, setRenderedBoard] = useState();
   const [moves, setMoves] = useState<typeof MovesRegister.moves>([]);
+  const [step, setStep] = useState(0);
+  const [interval, setIntervalVal] = useState<number | undefined>(undefined);
 
   function resetBoard() {
     let BoardModule = (Boards as any)[selectedBoard];
     let board = BoardModule.newBoard(size);
-    board = (Generators as any)[selectedGenerator].generate(board, BoardModule, MovesRegister);
-    board = (Renderers as any)[selectedRenderer].render(board, {h: React.createElement});
+    (Generators as any)[selectedGenerator].generate(board, BoardModule, MovesRegister);
+    let renderedBoard = (Renderers as any)[selectedRenderer].render(board, {h: React.createElement});
+
+    setRenderedBoard(renderedBoard);
     setBoard(board);
     setMoves(MovesRegister.moves);
+    setStep(0);
+
+    clearInterval(interval);
+    setIntervalVal(undefined);
   }
 
+  function stepNext() {
+    setStep((step) => {
+      if (step < moves.length) {
+        return step + 1;
+      } else {
+        setIntervalVal((interval) => {
+          if (interval !== undefined) {
+            clearInterval(interval);
+            return undefined;
+          }
+          return interval;
+        })
+        return step;
+      }
+    });
+  }
+
+  function stepLast() {
+    setStep(moves.length);
+  }
+
+  function stepFirst() {
+    setStep(0);
+  }
+
+  function stepBack() {
+    setStep((step) => step > 0 ? step - 1 : 0);
+  }
+
+  function toggleAnimation() {
+    if (interval !== undefined) {
+      clearInterval(interval);
+      setIntervalVal(undefined);
+    } else {
+      stepNext();
+      let interval = window.setInterval(stepNext, 100);
+      setIntervalVal(interval);
+    }
+  }
+
+  useEffect(() => {
+    if (moves.length < 1 || !board) {
+      return;
+    }
+
+    let BoardModule = (Boards as any)[selectedBoard];
+    let newBoard = BoardModule.newBoard(size), newPaths = {};
+
+    for (let i = 0; i < Math.min(step, moves.length); i++) {
+      [newBoard, newPaths] = MovesRegister.applyMove(newBoard as any, newPaths, moves[i], BoardModule);
+    }
+
+    let renderedBoard = (Renderers as any)[selectedRenderer].render(newBoard, {h: React.createElement, paths: newPaths});
+    setRenderedBoard(renderedBoard);
+    setBoard(newBoard);
+  }, [step]);
+
   useEffect(resetBoard, []);
-  return {board, moves, resetBoard};
+
+  return {
+    board: renderedBoard, resetBoard, moves,
+    step, stepNext, stepLast, stepBack, stepFirst,
+    toggleAnimation, isAnimating: interval !== undefined,
+  };
 }

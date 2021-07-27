@@ -15,7 +15,7 @@ body {
 
 @layer base {
     select, input[type="number"] {
-        @apply border-l-0 border-t-0 border-r-0 border-b border-gray-300 py-1.5 pl-1.5 w-full bg-transparent;
+        @apply text-sm border-l-0 border-t-0 border-r-0 border-b border-gray-300 py-1.5 pl-0.5 w-full bg-transparent;
         @apply focus:outline-none focus:border-gray-600;
         box-shadow: none!important;
     }
