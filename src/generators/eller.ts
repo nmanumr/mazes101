@@ -46,7 +46,7 @@ export function generate<Board extends BaseBoard>(
     = {register: (...args) => undefined, Type: MovesRegister.Type}
 ): Board {
   movesRegister.register(movesRegister.Type.RESET_MOVES);
-  let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
+  let fns: Required<BoardFunctions<Board>> = {getFactor: () => 0.5, ...funcs}
 
   let pathSets: ItemSets<number> = {};
   const rows = fns.getRows(board);
