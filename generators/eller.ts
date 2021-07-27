@@ -12,7 +12,7 @@ interface BoardFunctions<Board extends BaseBoard> {
 export const _required_fns = ["getRows", "removeInterWall", "getNeighbours"];
 export function generate<Board extends BaseBoard>(board: Board, funcs: BoardFunctions<Board>, movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'> = { register: (...args) => undefined, Type: MovesRegister.Type }): Board {
     movesRegister.register(movesRegister.Type.RESET_MOVES);
-    let fns: Required<BoardFunctions<Board>> = { getFactor: () => Math.random(), ...funcs };
+    let fns: Required<BoardFunctions<Board>> = { getFactor: () => 0.5, ...funcs };
     let pathSets: ItemSets<number> = {};
     const rows = fns.getRows(board);
     for (let index of rows[0]) {
