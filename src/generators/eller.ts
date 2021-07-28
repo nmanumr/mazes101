@@ -128,6 +128,8 @@ export function connectToOtherRow<Board extends BaseBoard>(
 
     rowCells = shuffle(rowCells);
     let n = 1 + Math.round(Math.random() * (rowCells.length - 1));
+    let toJoin: number[][] = [];
+
     for (let i = 0; i < n; i++) {
       const cell = rowCells[i];
       const nextRowCells = fns.getNeighbours(cell, board).filter((c) => nextRow.includes(c));
@@ -136,10 +138,15 @@ export function connectToOtherRow<Board extends BaseBoard>(
       if (nextCell === undefined || nextCell === null) {
         continue;
       }
+      toJoin.push([cell, nextCell]);
+    }
+
+    toJoin.sort((a, b) => a[0] - b[0]);
+
+    for (let [cell, nextCell] of toJoin) {
       board = fns.removeInterWall(cell, nextCell, board);
       set.add(nextCell);
 
-      console.log(id, nextCell);
       movesRegister.register(movesRegister.Type.APPEND_CELL_GROUP, {id, cell: nextCell, neighbourCell: cell});
     }
   }
