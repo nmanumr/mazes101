@@ -17,6 +17,7 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
         if (!isEnabled(board.cells[i]))
             continue;
         let [id, _] = addItemSet(i, pathSets);
+        movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, { id, cell: i });
         visitableCells++;
     }
     while (visited.size < visitableCells) {
@@ -30,8 +31,10 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
             continue;
         board = fns.removeInterWall(randomCell, randomNeighbour, board);
         pathSets = joinItemSets(randomCell, randomNeighbour, pathSets);
+        movesRegister.register(movesRegister.Type.MERGE_CELL_GROUP, { cell1: randomCell, cell2: randomNeighbour });
         visited.add(randomCell);
         visited.add(randomNeighbour);
     }
+    movesRegister.register(movesRegister.Type.CLEAR_CELL_GROUPS);
     return board;
 }
