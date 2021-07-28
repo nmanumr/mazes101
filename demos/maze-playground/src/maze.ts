@@ -13,6 +13,7 @@ let fieldOptions = {
     options: [
       {value: 'circular', text: 'Circular'},
       {value: 'rectangular', text: 'Rectangular'},
+      {value: 'weave', text: 'Weave'},
     ],
     default: 'rectangular',
   },
@@ -85,6 +86,9 @@ export function useMazeOptions() {
   } else if (fields.board?.value === 'rectangular') {
     boardOptions = ['width', 'height']
     selectedRenderer = 'rectangularSvg';
+  } else if (fields.board?.value === 'weave') {
+    boardOptions = ['width', 'height']
+    selectedRenderer = 'weaveSvg';
   }
 
   boardOptions = boardOptions.map((i) => ({

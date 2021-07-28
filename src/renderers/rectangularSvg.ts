@@ -23,15 +23,15 @@ export function render<T = string>(board: RectangularBoard, options: Partial<Ren
   let opts: RendererOptions<T> = {...defaultOptions, ...options} as RendererOptions<T>;
   let colors = fillColor(opts.paths, opts.colors);
 
-  const width = opts.cellSize * (board.size.width + 2) + opts.lineWidth;
-  const height = opts.cellSize * (board.size.height + 2) + opts.lineWidth;
+  const width = opts.cellSize * (board.size.width) + opts.lineWidth;
+  const height = opts.cellSize * (board.size.height) + opts.lineWidth;
   let paths: Record<string, string> = {};
   let walls = '';
 
   board.cells.forEach((cell, index) => {
     const {x, y} = toPosition(index, {size: board.size});
-    const pivotX = x * opts.cellSize + (opts.lineWidth / 2) + opts.cellSize;
-    const pivotY = y * opts.cellSize + (opts.lineWidth / 2) + opts.cellSize;
+    const pivotX = x * opts.cellSize + (opts.lineWidth / 2);
+    const pivotY = y * opts.cellSize + (opts.lineWidth / 2);
     const pathId = findCellPathId(index, opts.paths);
 
     if ((cell & Direction.TOP) === 0) {

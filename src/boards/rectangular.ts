@@ -126,6 +126,8 @@ export function getRelativeDirection(
 
 /**
  * Returns a new position in direction relative to the given position
+ *
+ * NOTE: can't work for weave boards
  */
 export function getRelativePosition({x, y}: Position, direction: Direction) {
   let newPosition = {x, y};

@@ -17,9 +17,10 @@ export interface BaseBoard {
 
 export const enum BoardType {
   Rectangular="rectangular",
+  Weave="weave",
   Circular="circular",
   Triangular="triangular",
-  Hexagonal="hexagonal"
+  Hexagonal="hexagonal",
 }
 
 /**
