@@ -6,4 +6,6 @@ fs.ensureDirSync('dist');
 rollupBundle({
   input: 'src/index.ts',
   dest: 'dist/index.umd.js',
+  format: 'iife',
+  declaration: false,
 });

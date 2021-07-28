@@ -37,6 +37,7 @@ export default function rollupBundle({dest, input, format = 'umd', minify = true
       sourcemap: true,
     });
   }).then(function (result) {
+    result = result.output[0];
     // rollup doesn't add a sourceMappingURL
     // https://github.com/rollup/rollup/issues/121
     result.code = result.code + '\n//# sourceMappingURL=' + path.basename(sourcemapFullFile);
