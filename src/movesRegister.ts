@@ -70,8 +70,14 @@ export function applyMove<Board extends BaseBoard, T extends keyof MoveTypeParam
     let path1Id = Object.entries(paths).find((e) => e[1].includes(cell1))?.[0] as string | number;
     let path2Id = Object.entries(paths).find((e) => e[1].includes(cell2))?.[0] as string | number;
 
-    paths[path1Id] = [...paths[path1Id], ...paths[path2Id]];
-    delete paths[path2Id];
+    if (paths[path1Id].length > paths[path2Id].length) {
+      paths[path1Id] = [...paths[path1Id], ...paths[path2Id]];
+      delete paths[path2Id];
+    } else {
+      paths[path2Id] = [...paths[path1Id], ...paths[path2Id]];
+      delete paths[path1Id];
+    }
+
     board = fns.removeInterWall(cell1, cell2, board);
   }
 

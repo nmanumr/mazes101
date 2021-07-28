@@ -43,6 +43,7 @@ export function generate<Board extends BaseBoard>(
   for (let i = 0; i < board.cells.length; i++) {
     if (!isEnabled(board.cells[i])) continue;
     let [id, _] = addItemSet(i, pathSets);
+    movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id, cell: i});
     visitableCells++;
   }
 
@@ -58,9 +59,11 @@ export function generate<Board extends BaseBoard>(
 
     board = fns.removeInterWall(randomCell, randomNeighbour, board);
     pathSets = joinItemSets(randomCell, randomNeighbour, pathSets);
+    movesRegister.register(movesRegister.Type.MERGE_CELL_GROUP, {cell1: randomCell, cell2: randomNeighbour});
     visited.add(randomCell);
     visited.add(randomNeighbour);
   }
 
+  movesRegister.register(movesRegister.Type.CLEAR_CELL_GROUPS);
   return board;
 }
