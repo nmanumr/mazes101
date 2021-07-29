@@ -3,6 +3,7 @@
  */
 
 import * as rectangular from './boards/rectangular';
+import * as weave from './boards/weave';
 import * as circular from './boards/circular';
 import generators from './generators';
 import renderers from './renderers';
@@ -21,6 +22,17 @@ for (let mazeEl of mazeEls) {
     }
 
     let el = renderers.rectangularSvg.render<SVGElement>(board, {...data, h: DomH});
+    mazeEl.appendChild(el);
+  }
+
+  else if (data.board === "weave") {
+    let board = weave.newBoard({width: data.size[0], height: data.size[1]});
+
+    if (data.generator && generators[data.generator]) {
+      board = generators[data.generator].generate(board, weave);
+    }
+
+    let el = renderers.weaveSvg.render<SVGElement>(board, {...data, shouldFillPath: false, h: DomH});
     mazeEl.appendChild(el);
   }
 

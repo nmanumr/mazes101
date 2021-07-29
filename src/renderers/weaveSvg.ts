@@ -8,6 +8,7 @@ interface RendererOptions<T> {
   lineWidth: number;
   paths: Record<number | string, number[]>,
   colors: Record<number | string, string>,
+  shouldFillPath: boolean,
   cellGap: number;
   h: (tag: string, attributes: Record<string, string>, ...children: Array<any>) => T;
 }
@@ -15,6 +16,7 @@ interface RendererOptions<T> {
 const defaultOptions: RendererOptions<string> = {
   cellSize: 22,
   lineWidth: 2,
+  shouldFillPath: true,
   paths: {},
   colors: {'default': 'white'},
   cellGap: 8,
@@ -29,6 +31,7 @@ export function render<T = string>(board: RectangularBoard, options: Partial<Ren
   const height = (opts.cellSize + (opts.cellGap/2) + opts.lineWidth*2) * board.size.height - opts.lineWidth*2;
   let paths: Record<string, string> = {};
   let walls = '';
+  let defaultPath = '';
 
   board.cells.forEach((cell, index) => {
     const {x, y} = toPosition(index, {size: board.size});
@@ -93,7 +96,7 @@ export function render<T = string>(board: RectangularBoard, options: Partial<Ren
     y2o /= 2;
 
     let closedPath = `M${pivotX + x1o},${pivotY + y1o}H${pivotX + opts.cellSize + x2o}V${pivotY + opts.cellSize + y2o}H${pivotX + x1o}z`;
-    paths['default'] = ((paths['default'] || '') + closedPath);
+    defaultPath += closedPath;
     if (pathId) {
       paths[pathId] = ((paths[pathId] || '') + closedPath);
     }
@@ -112,6 +115,7 @@ export function render<T = string>(board: RectangularBoard, options: Partial<Ren
     Object.entries(paths).map(([k, path]) => {
       return h('path', {d: path, fill: colors[k], key: k, strokeWidth: `0`});
     }),
+    opts.shouldFillPath && h('path', {d: defaultPath, strokeWidth: `0`, fill: colors.default}),
     h('path', {d: walls, strokeWidth: `${opts.lineWidth}px`, strokeLinecap: 'round'}),
   );
 }
