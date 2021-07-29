@@ -9,6 +9,18 @@ export default function keyTransformer(program) {
       if (ts.isImportDeclaration(node)) {
         return handleImportExpression(node);
       }
+
+      if (ts.isExportDeclaration(node) && node.moduleSpecifier) {
+        let resolvedModule = resolveModule(node.moduleSpecifier.text, node.parent.resolvedModules);
+        return ts.factory.createExportDeclaration(
+            node.decorators,
+            node.modifiers,
+            node.isTypeOnly,
+            node.exportClause,
+            ts.factory.createStringLiteral(resolvedModule)
+        )
+      }
+
       if (!isKeysCallExpression(node, typeChecker)) {
         return node;
       }
@@ -30,20 +42,26 @@ function handleImportExpression(node) {
   if (module === 'ts-transformer-keys') {
     return;
   }
-  let resolvedModule = node.parent.resolvedModules.get(module);
-  if (resolvedModule.isExternalLibraryImport) return node;
+  let resolvedModule = resolveModule(module, node.parent.resolvedModules);
+
+  return ts.factory.createImportDeclaration(
+      node.decorators,
+      node.modifiers,
+      node.importClause,
+      ts.factory.createStringLiteral(resolvedModule)
+  );
+}
+
+function resolveModule(module, resolvedModules) {
+  let resolvedModule = resolvedModules.get(module);
+  if (resolvedModule.isExternalLibraryImport) return module;
 
   let newModule = `${module}${resolvedModule.extension}`
   if (resolvedModule.resolvedFileName.endsWith(`/index${resolvedModule.extension}`)) {
     newModule = `${module}/index${resolvedModule.extension}`
   }
 
-  return ts.factory.createImportDeclaration(
-      node.decorators,
-      node.modifiers,
-      node.importClause,
-      ts.factory.createStringLiteral(newModule)
-  );
+  return newModule;
 }
 
 function isKeysCallExpression(node, typeChecker) {
