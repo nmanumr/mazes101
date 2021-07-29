@@ -1,6 +1,8 @@
-import {BaseBoard, isEnabled} from "../base.js";
-import {difference, getRandomFrom, getRandomIndexFrom} from "../utils.js";
+import {BaseBoard, isEnabled} from "../base";
+import {difference, getRandomFrom} from "../utils";
 import {keys} from "ts-transformer-keys";
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -25,7 +27,13 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
  *
  * Ref: http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>): Board {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  fns: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+): Board {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
   let visitedCells = new Set<number>();
   const enabledCells = board.cells
     .map((_, i) => i)

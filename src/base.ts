@@ -17,9 +17,10 @@ export interface BaseBoard {
 
 export const enum BoardType {
   Rectangular="rectangular",
+  Weave="weave",
   Circular="circular",
   Triangular="triangular",
-  Hexagonal="hexagonal"
+  Hexagonal="hexagonal",
 }
 
 /**
@@ -58,15 +59,15 @@ export function disableCells<Board extends BaseBoard>(indexes: number[], board: 
  * given cell with all wall removed
  */
 export function removeAllWall(cell: number): number {
-  return !isEnabled(cell) ? cell : cell | 0b0111_1111;
+  return !isEnabled(cell) ? 0b1111_1111 : cell | 0b0111_1111;
 }
 
 /**
  * Returns a new cell representation of the
- * given cell with all wall removed
+ * given cell with all wall set
  */
 export function setAllWalls(cell: number): number {
-  return !isEnabled(cell) ? cell : cell & 0b0000_0000;
+  return !isEnabled(cell) ? cell & 0b1000_0000 : cell & 0b0000_0000;
 }
 
 /**

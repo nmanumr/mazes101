@@ -2,15 +2,24 @@
   "name": "mazes101",
   "version": "0.0.0-development",
   "description": "Utilities to generate, render and hack with any sort of mazes",
-  "main": "index.cjs",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "types": "types/index.d.ts",
+  "type": "module",
   "files": [
-    "**"
+    "cjs/**/!(*.tsbuildinfo)",
+    "esm/**/!(*.tsbuildinfo)",
+    "types/**/!(*.tsbuildinfo)",
+    "package.json",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
-    "build": "rm -rf dist && ttsc && rollup --config",
-    "watch": "ttsc --watch",
+    "compile": "npm-run-all --parallel compile:js compile:umd compile:deno compile:docs-script",
+    "compile:js": "ttsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json ./src/tsconfig.types.json",
+    "compile:umd": "node tools/build-umd.js",
+    "compile:docs-script": "node tools/build-docs-script.js",
+    "compile:deno": "node tools/build-deno.js",
     "semantic-release": "semantic-release"
   },
   "repository": {
@@ -30,7 +39,37 @@
     "url": "https://github.com/nmanumr/mazes101/issues"
   },
   "homepage": "https://nmanumr.github.io/mazes101/",
+  "exports": {
+    ".": {
+      "node": "./cjs/index.js",
+      "default": "./esm/index.js"
+    },
+    "./boards": {
+      "node": "./cjs/boards/index.js",
+      "default": "./esm/boards/index.js"
+    },
+    "./generators": {
+      "node": "./cjs/generators/index.js",
+      "default": "./esm/generators/index.js"
+    },
+    "./masks": {
+      "node": "./cjs/masks/index.js",
+      "default": "./esm/masks/index.js"
+    },
+    "./renderers": {
+      "node": "./cjs/renderers/index.js",
+      "default": "./esm/renderers/index.js"
+    },
+    "./*": {
+      "node": "./cjs/*.js",
+      "default": "./esm/*.js"
+    },
+    "./package.json": "./package.json"
+  },
   "devDependencies": {
+    "fs-extra": "^10.0.0",
+    "glob": "^7.1.7",
+    "npm-run-all": "^4.1.5",
     "preact": "^10.5.14",
     "rollup": "^2.47.0",
     "rollup-plugin-terser": "^7.0.2",

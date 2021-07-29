@@ -4,6 +4,8 @@ repo_name: nmanumr/mazes101
 copyright: Copyright &copy; 2021 - 2022 Nauman Umer
 
 extra:
+  version:
+    provider: mike
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/nmanumr/mazes101
@@ -33,6 +35,8 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.highlight
   - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
@@ -42,21 +46,23 @@ nav:
   - Boards:
       - Overview: 'boards/index.md'
       - Rectangular Board: 'boards/rectangular.md'
+      - Weave Board: 'boards/weave.md'
       - Circular Board: 'boards/circular.md'
-      - Custom Board: 'boards/custom.md'
   - Generators:
       - Overview: 'generators/index.md'
       - Aldous Broder: 'generators/aldousBroder.md'
-#      - Backtrack: 'generators/backtrack.md'
+      - Backtrack: 'generators/backtrack.md'
       - Eller: 'generators/eller.md'
       - Kruskal: 'generators/kruskal.md'
       - Prim: 'generators/prim.md'
       - Sidewinder: 'generators/sidewinder.md'
-#      - Wilson: 'generators/wilson.md'
+      - Wilson: 'generators/wilson.md'
   - Renderers:
       - Overview: 'renderers/index.md'
-      - CircularSVG: 'renderers/circularSvg.md'
-      - RectangularSVG: 'renderers/rectangularSvg.md'
+      - h function: 'renderers/hfunction.md'
+      - Rectangular SVG: 'renderers/rectangularSvg.md'
+      - Weave SVG: 'renderers/weaveSvg.md'
+      - Circular SVG: 'renderers/circularSvg.md'
 
 theme:
   name: material

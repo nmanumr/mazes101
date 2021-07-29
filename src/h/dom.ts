@@ -1,4 +1,5 @@
 import {JSX as JSXInternal} from "preact"
+import {normalizeAttr} from './index';
 
 type Child =
   | HTMLElement
@@ -6,28 +7,11 @@ type Child =
   | string
   | number
 
-type Attributes =
-  & JSXInternal.HTMLAttributes
-  & JSXInternal.SVGAttributes
-  & Record<string, any>;
+type Attributes = JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes;
 
 // CAUTION: These are not all the svg tags but some of the svg tags
 // that can be used in the scope of this project
 const svgTags = ['svg', 'path', 'circle', 'line', 'rect'];
-const attrMap = {
-  'className': 'class',
-}
-
-function normalizeAttr(attr: string) {
-  if (attrMap[attr]) attr = attrMap[attr];
-
-  return attr.split('').map((letter, idx) => {
-    return letter.toUpperCase() === letter
-      ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}`
-      : letter;
-  }).join('');
-}
-
 
 /**
  * Append a child node to an element
@@ -86,37 +70,4 @@ export function DomH(
 
   /* Return element */
   return el
-}
-
-/**
- * JSX factory that renders HTML string
- */
-export function StrH(tag: string, attributes: Attributes | null, ...children: Child[]): string {
-  let attrStr = Object.entries(attributes).map(([key, val]) => {
-    if (typeof val === 'boolean') {
-      return normalizeAttr(key);
-    }
-    return `${normalizeAttr(key)}="${val}"`;
-  }).join(' ');
-
-  let childStr = children.map((child) => child.toString()).join('');
-
-  if (childStr) {
-    if (attrStr) {
-      return `<${tag} ${attrStr}>${childStr}</${tag}>`;
-    }
-    return `<${tag}>${childStr}</${tag}>`;
-  } else if (attrStr) {
-    return `<${tag} ${attrStr} />`;
-  }
-
-  return `<${tag} />`;
-}
-
-/* This override is necessary for types to work */
-export declare namespace h {
-  namespace JSX {
-    type Element = HTMLElement
-    type IntrinsicElements = JSXInternal.IntrinsicElements
-  }
 }

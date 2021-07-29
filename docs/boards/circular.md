@@ -1,6 +1,6 @@
 # Circular Board
 
-{{ maze('circular', 10, 'kruskal') }}
+{{ maze('circular', 10, 'backtrack') }}
 
 ## Usage
 
@@ -25,12 +25,16 @@
 
 ### Size Parameters
 
+[:octicons-file-code-24: Source][1]
+
 A rectangular board has two size parameters:
 
-1. `radius`: 
+1. `radius`: Its 
 2. `innerRadius`
 
 ### Position
+
+[:octicons-file-code-24: Source][2]
 
 Position of each cell is represented by polar coordinates where:
 
@@ -38,6 +42,8 @@ Position of each cell is represented by polar coordinates where:
 * `t` is nth cell in rth row
 
 ### Directions
+
+[:octicons-file-code-24: Source][3]
 
 Each cell in a rectangular board utilizes 4 directions as following:
 
@@ -48,3 +54,8 @@ Each cell in a rectangular board utilizes 4 directions as following:
 5. Left (mask: `0b10000` or `16`)
 
 If there is only one top cell it will be considered in top clockwise direction.
+
+
+[1]: https://github.com/nmanumr/mazes101/blob/master/src/boards/circular.ts#L18
+[2]: https://github.com/nmanumr/mazes101/blob/master/src/boards/circular.ts#L23
+[3]: https://github.com/nmanumr/mazes101/blob/master/src/boards/circular.ts#L9

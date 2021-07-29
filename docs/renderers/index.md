@@ -1,6 +1,6 @@
 # Renderers
 
-A renderer is a function that takes a board ha render it to some other form (maybe to svg, canvas, image or text).
+A renderer is a function that takes a board and renders it to some other form (maybe to svg, canvas, image or string).
 
 Following are some renders built-in mazes101:
 

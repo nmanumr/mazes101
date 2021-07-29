@@ -1,7 +1,9 @@
-import {BaseBoard, isEnabled} from "../base.js";
-import {getRandomIndexFrom, getRandomFrom} from "../utils.js";
-import {isFromSameSet, ItemSets, joinItemSets} from "./_pathSet.js";
+import {BaseBoard, isEnabled} from "../base";
+import {getRandomIndexFrom, getRandomFrom} from "../utils";
+import {addItemSet, isFromSameSet, ItemSets, joinItemSets} from "./_pathSet";
 import {keys} from "ts-transformer-keys";
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -27,14 +29,21 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
  *
  * Ref: https://weblog.jamisbuck.org/2011/1/3/maze-generation-kruskal-s-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
-  let pathSets: ItemSets<number> = [];
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  fns: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+) {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
+  let pathSets: ItemSets<number> = {};
   let visited = new Set();
   let visitableCells = 0;
 
   for (let i = 0; i < board.cells.length; i++) {
     if (!isEnabled(board.cells[i])) continue;
-    pathSets.push(new Set([i]));
+    let [id, _] = addItemSet(i, pathSets);
+    movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id, cell: i});
     visitableCells++;
   }
 
@@ -50,9 +59,11 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
 
     board = fns.removeInterWall(randomCell, randomNeighbour, board);
     pathSets = joinItemSets(randomCell, randomNeighbour, pathSets);
+    movesRegister.register(movesRegister.Type.MERGE_CELL_GROUP, {cell1: randomCell, cell2: randomNeighbour});
     visited.add(randomCell);
     visited.add(randomNeighbour);
   }
 
+  movesRegister.register(movesRegister.Type.CLEAR_CELL_GROUPS);
   return board;
 }

@@ -1,4 +1,4 @@
-import {BaseBoard, disableCell} from "../base.js";
+import {BaseBoard, disableCell} from "../base";
 
 /*--------------
  * Types
@@ -44,10 +44,10 @@ export function applyMask<Board extends BaseBoard>(board: Board, mask: Array<Arr
 /**
  * Create a mask for rectangular maze which has given text rendered
  */
-export function maskFromText(text: string, opt: Partial<MaskOptions> = {}) {
-  opt = {...defaultOptions, ...opt};
+export function maskFromText(text: string, options: Partial<MaskOptions> = {}) {
+  let opt: MaskOptions = {...defaultOptions, ...options} as MaskOptions;
 
-  let board = [];
+  let board: Array<number[][]> = [];
   for (let char of text.split('')) {
     board.push(opt.fontData[char.charCodeAt(0)] || opt.fontData[0]);
   }
@@ -103,7 +103,7 @@ export function loadHexFontData(data: Record<string, string>, trimX = true, trim
  */
 export function hexToBitMap(hex: string, trimX = false, trimY = false): Array<Array<number>> {
   let bitmap = hex.match(/.{1,2}/g)
-    .map((chunk) => {
+    ?.map((chunk) => {
       return parseInt(chunk, 16)
         .toString(2)
         .padStart(8, '0')
@@ -111,10 +111,10 @@ export function hexToBitMap(hex: string, trimX = false, trimY = false): Array<Ar
         .map((c) => +c);
     });
 
-  if (trimX) bitmap = trimBitmap(bitmap);
-  if (trimY) bitmap = bitmap.filter((r) => !r.every((e) => e === 0));
+  if (trimX) bitmap = trimBitmap(bitmap ?? []);
+  if (trimY) bitmap = bitmap?.filter((r) => !r.every((e) => e === 0));
 
-  return bitmap;
+  return bitmap ?? [];
 }
 
 /**
@@ -134,8 +134,8 @@ export function trimBitmap(bitmap: Array<Array<number>>) {
     let startM = rowStr.match(/^0*/);
     let endM = rowStr.match(/0*$/);
 
-    startX = Math.min(startM[0].length, startX);
-    endX = Math.max(rowStr.length - endM[0].length, endX);
+    startX = Math.min(startM?.[0].length ?? 0, startX);
+    endX = Math.max(rowStr.length - (endM?.[0].length ?? 0), endX);
   }
 
   return bitmap.map((r) => r.slice(startX, endX));
@@ -164,7 +164,7 @@ export async function loadFont(fontName: typeof fonts[number]): Promise<FontData
       let [code, data] = line.split(":");
       let bitmap = data
         .match(/.{1,2}/g)
-        .map((chunk) => {
+        ?.map((chunk) => {
           return parseInt(chunk, 16)
             .toString(2)
             .padStart(8, '0')
@@ -172,7 +172,7 @@ export async function loadFont(fontName: typeof fonts[number]): Promise<FontData
             .map((c) => +c);
         })
 
-      fontData[parseInt(code, 16)] = bitmap;
+      fontData[parseInt(code, 16)] = bitmap ?? [];
     }
   }
 

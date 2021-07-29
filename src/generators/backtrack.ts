@@ -1,6 +1,8 @@
-import {BaseBoard, isEnabled} from "../base.js";
-import {getRandomFrom} from "../utils.js";
+import {BaseBoard, isEnabled} from "../base";
+import {getRandomFrom} from "../utils";
 import {keys} from 'ts-transformer-keys';
+import * as MovesRegister from '../movesRegister';
+import {PartialExcept} from "../types";
 
 /*--------------
  * Types
@@ -23,7 +25,14 @@ export const _required_fns = keys<BoardFunctions<BaseBoard>>();
 /**
  * Generates maze using BackTrace maze generation Algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  fns: BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+) {
+
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
   let visitableCells = Array.from(board.cells)
     .map((_, i) => i)
     .filter((c) => isEnabled(c));
@@ -32,6 +41,8 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
   let currentCell = getRandomFrom(visitableCells);
   visitedCells.add(currentCell);
   let pathStack = [currentCell];
+
+  movesRegister.register(movesRegister.Type.CREATE_CELL_GROUP, {id: 0, cell: currentCell});
 
   while (pathStack.length !== 0) {
     currentCell = pathStack[pathStack.length - 1];
@@ -44,8 +55,13 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
       visitedCells.add(randomCell);
       board = fns.removeInterWall(currentCell, randomCell, board);
       pathStack.push(randomCell);
+
+      movesRegister.register(movesRegister.Type.APPEND_CELL_GROUP, {
+        id: 0, cell: randomCell, neighbourCell: currentCell
+      });
     } else {
-      pathStack.pop();
+      let id = pathStack.pop() as number;
+      movesRegister.register(movesRegister.Type.POP_CELL_GROUP, {id: 0, cell: id});
     }
   }
 

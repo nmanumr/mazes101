@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "mazes101/": "https://raw.githubusercontent.com/nmanumr/mazes101/deno/"
+  }
+}

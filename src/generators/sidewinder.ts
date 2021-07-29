@@ -1,8 +1,10 @@
-import {BaseBoard} from "../base.js";
-import {getRandomFrom, shuffle} from "../utils.js";
+import {BaseBoard} from "../base";
+import {getRandomFrom, shuffle} from "../utils";
 import {keys} from "ts-transformer-keys";
 import {ItemSets} from "./_pathSet";
-import {visitRow} from './eller.js';
+import {visitRow} from './eller';
+import {PartialExcept} from "../types";
+import * as MovesRegister from "../movesRegister";
 
 /*--------------
  * Types
@@ -38,9 +40,17 @@ export const _required_fns = keys<Omit<BoardFunctions<BaseBoard>, 'getFactor'>>(
  *
  * Ref: https://weblog.jamisbuck.org/2011/2/3/maze-generation-sidewinder-algorithm
  */
-export function generate<Board extends BaseBoard>(board: Board, fns: BoardFunctions<Board>) {
+export function generate<Board extends BaseBoard>(
+  board: Board,
+  funcs:BoardFunctions<Board>,
+  movesRegister: PartialExcept<typeof MovesRegister, 'register' | 'Type'>
+    = {register: (...args) => undefined, Type: MovesRegister.Type}
+) {
+  movesRegister.register(movesRegister.Type.RESET_MOVES);
+  let fns: Required<BoardFunctions<Board>> = {getFactor: () => Math.random(), ...funcs}
+
   let rows = fns.getRows(board);
-  let pathSets: ItemSets<number> = [];
+  let pathSets: ItemSets<number> = {};
 
   if (!fns.getFactor) {
     // if fns object is freezed, this will make it a normal object.
@@ -48,10 +58,10 @@ export function generate<Board extends BaseBoard>(board: Board, fns: BoardFuncti
     fns.getFactor = () => Math.random();
   }
 
-  [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns);
+  [board, pathSets] = visitRow(rows[0], 0, true, board, pathSets, fns, movesRegister);
 
   for (let i = 1; i < rows.length; i++) {
-    [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns);
+    [board, pathSets] = visitRow(rows[i], i, false, board, pathSets, fns, movesRegister);
     [board, pathSets] = connectToOtherRow(rows[i], rows[i - 1], board, pathSets, fns);
   }
 
@@ -66,7 +76,7 @@ export function connectToOtherRow<Board extends BaseBoard>(
   pathSets: ItemSets<number>,
   fns: BoardFunctions<Board>
 ): [Board, ItemSets<number>] {
-  for (let set of pathSets) {
+  for (let [id, set] of Object.entries(pathSets)) {
     let rowCells = Array.from(set).filter((index) => row.includes(index));
     rowCells = shuffle(rowCells);
 

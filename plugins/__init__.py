@@ -35,6 +35,10 @@ def define_env(env):
             width = cell_size * (size[0] + line_width) + line_width
             height = cell_size * (size[1] + line_width) + line_width
 
+        elif board == 'weave':
+            width = cell_size * (size[0] + line_width) + line_width
+            height = cell_size * (size[1] + line_width) + line_width
+
         elif board == 'circular':
             # size = [radius, inner_radius] or radius
             size = [size, 4] if type(size) is int else size

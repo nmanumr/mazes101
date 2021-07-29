@@ -1,4 +1,4 @@
-import {BaseBoard, setInterWallValue} from "../base.js";
+import {BaseBoard, setInterWallValue} from "../base";
 import {PartialExcept} from "../types";
 import {keys} from "ts-transformer-keys";
 
@@ -42,8 +42,7 @@ function sum(nums: number[]) {
 /**
  * Returns a new CircularBoard for the given size
  */
-export function newBoard({radius, innerRadius}: {radius: number, innerRadius: number}): CircularBoard {
-  if (!innerRadius) innerRadius = 3;
+export function newBoard({radius, innerRadius = 3}: { radius: number, innerRadius?: number }): CircularBoard {
   const nodeCount = getRingNodeCount(radius);
   const totalNodes = sum(nodeCount.slice(innerRadius));
 
@@ -113,7 +112,9 @@ export function getRelativeDirection(index1: number, index2: number, {size}: Par
 
   if (pos1.r - 1 === pos2.r) return Direction.BOTTOM;
   if (pos1.r === pos2.r && pos1.t + 1 === pos2.t) return Direction.RIGHT;
+  if (pos1.r === pos2.r && pos1.t < pos2.t && pos1.t === 0) return Direction.LEFT;
   if (pos1.r === pos2.r && pos1.t - 1 === pos2.t) return Direction.LEFT;
+  if (pos1.r === pos2.r && pos1.t > pos2.t && pos2.t === 0) return Direction.RIGHT;
 
   // Here is a trick to check if pos2 is in clock-wise or counter clock-wise top direction
   // I just observed that clockwise top cells always have even index
@@ -170,7 +171,7 @@ export function toPosition(index: number, {size}: PartialExcept<CircularBoard, '
  */
 export function getRows({size}: CircularBoard): number[][] {
   const nodeCounts = getRingNodeCount(size.radius).slice(size.innerRadius);
-  let sum = 0, rows = [];
+  let sum = 0, rows: number[][] = [];
   for (let count of nodeCounts) {
     rows.push(Array.from(new Array(count), (_, i) => sum + i));
     sum += count;
@@ -192,7 +193,7 @@ export function getNeighbours(index: number, {size}: CircularBoard) {
 
   const r = nodeCountSum.findIndex((val) => val > index) - 1;
   const t = index - nodeCountSum[r];
-  let neighbours = [];
+  let neighbours: number[] = [];
 
   if (r < (size.radius - size.innerRadius - 1)) {
     if (nodeCount[r] < nodeCount[r + 1]) {
@@ -205,19 +206,27 @@ export function getNeighbours(index: number, {size}: CircularBoard) {
     }
   }
   // RIGHT
-  if (t > 0) { neighbours.push(index - 1); }
+  if (t > 0) {
+    neighbours.push(index - 1);
+  } else {
+    neighbours.push(index + nodeCount[r] - 1);
+  }
   // BOTTOM
   if (r > 0) {
     let cellIndex;
     if (nodeCount[r] > nodeCount[r - 1]) {
       cellIndex = toIndex({r: r - 1, t: Math.floor(t / 2)}, {size});
     } else {
-      cellIndex =  toIndex({r: r - 1, t}, {size});
+      cellIndex = toIndex({r: r - 1, t}, {size});
     }
     neighbours.push(cellIndex);
   }
   // LEFT
-  if (t < nodeCount[r] - 1) { neighbours.push(index + 1); }
+  if (t < nodeCount[r] - 1) {
+    neighbours.push(index + 1);
+  } else {
+    neighbours.push(index - nodeCount[r] + 1);
+  }
 
   return neighbours;
 }

@@ -1,3 +1,0 @@
-# Custom Boards
-
-Coming soon...

@@ -7,6 +7,7 @@ name = "pypi"
 mkdocs = "*"
 mkdocs-material = "*"
 mkdocs-macros-plugin = "*"
+mike = "*"
 
 [dev-packages]
 

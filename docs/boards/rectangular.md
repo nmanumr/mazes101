@@ -16,19 +16,6 @@ let board = newBoard({height: 20, width: 20});
 
 * [`size`](#size-parameters): size of the board
 
-### From existing base board
-
-```js
-import {newFromBaseBoard} from 'mazes101/boards/rectangular';
-
-let board = newFromBaseBoard(baseBoard, {height: 20, width: 20});
-```
-
-`newBoard` method takes two arguments:
-
-* `baseBoard`: an object which has a cells property of type `UInt8Array`.
-* [`size`](#size-parameters): size of the board
-
 ## Anatomy
 
 <svg fill="none" viewBox="0 0 937 462">
@@ -89,6 +76,6 @@ Each cell in a rectangular board utilizes 4 directions as following:
 4. Left (mask: `0b1000` or `8`)
 
 
-    [1]: https://github.com/nmanumr/mazes101/blob/master/src/boards/rectangular.ts#L16
-    [2]: https://github.com/nmanumr/mazes101/blob/master/src/boards/rectangular.ts#L21
-    [3]: https://github.com/nmanumr/mazes101/blob/master/src/boards/rectangular.ts#L9
+[1]: https://github.com/nmanumr/mazes101/blob/master/src/boards/rectangular.ts#L16
+[2]: https://github.com/nmanumr/mazes101/blob/master/src/boards/rectangular.ts#L21
+[3]: https://github.com/nmanumr/mazes101/blob/master/src/boards/rectangular.ts#L9
