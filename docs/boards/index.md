@@ -15,8 +15,9 @@ Each board needs to have following 3 functions:
 
 Mazes101 comes with following builtin boards:
 
-* [Circular Board](circular.md)
 * [Rectangular Board](rectangular.md)
+* [Weave Board](weave.md)
+* [Circular Board](circular.md)
 * Hexagonal Board (_coming soon..._)
 * Triangular Board (_coming soon..._)
 
