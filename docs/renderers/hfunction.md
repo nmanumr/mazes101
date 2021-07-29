@@ -57,7 +57,7 @@ containerEl.appendChild(output);
 ```
 
 [1]: https://github.com/nmanumr/mazes101/blob/master/src/h/index.ts#L25
-[1]: https://github.com/nmanumr/mazes101/blob/master/src/h/dom.ts#L41
+[2]: https://github.com/nmanumr/mazes101/blob/master/src/h/dom.ts#L41
 
 
 ##  Usage with Frameworks
