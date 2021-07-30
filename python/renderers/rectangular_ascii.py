@@ -13,15 +13,14 @@ import numpy as np
 # │─│ │── │   │ ──│── │ ────│ │ │─│ ──│
 # │   ────│ │ │──── │ │── │   │── │── │
 # │ │───────│───────│───│───│───│─────│
-
-class Symbols:
-    top = '─'
-    bottom = '─'
-    left = '│'
-    top = '│'
-
+ 
 class Renderer:
-
+    symbols = {
+        'top','─'
+        'right','│'
+        'bottom','─'
+        'left','│'
+    }
     def __init__(self,board,cells,width):
         self.cells = board.cells
         self.width = width
@@ -32,17 +31,28 @@ class Renderer:
     def detect_walls(self):
         for row in self.rows:
             walls_row = []
-            top_lst = []
-            right_lst = []
-            left_lst = []
-            bottom_lst = []
             for cell in row:
-                top_lst.append(cell.has_cell_wall(Direction.TOP))
-                right_lst.append(cell.has_cell_wall(Direction.RIGHT))
-                left_lst.append(cell.has_cell_wall(Direction.BOTTOM))
-                bottom_lst.append(cell.has_cell_wall(Direction.LEFT))
-            self.walls_lst.append([top_lst,right_lst,left_lst,bottom_lst])
+                cell_walls = []
+                cell_walls.append(cell.has_cell_wall(Direction.TOP))
+                cell_walls.append(cell.has_cell_wall(Direction.RIGHT))
+                cell_walls.append(cell.has_cell_wall(Direction.BOTTOM))
+                cell_walls.append(cell.has_cell_wall(Direction.LEFT))
+                walls_row.append(cell_walls)
+            self.walls_lst.append(walls_row)
+
+    def print_symbol(self,dir_str,is_wall):
+        if is_wall:
+            print(self.symbols[dir_str],end='')
+        else:
+            print(' ',end='')
 
     def draw(self):
-        for row_walls in self.walls_by_row:
-            row_walls_arr = np.array(row_walls)
+        for y,row_walls in enumerate(self.walls_by_row):
+            for x,walls in enumerate(row_walls):
+                self.print_symbol('top',walls[0])
+                self.print_symbol('left',walls[3])
+                if x == 7:
+                    self.print_symbol('right',walls[1])
+                if y == 7:
+                    self.print_symbol('bottom',walls[2])
+            print()
