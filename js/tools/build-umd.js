@@ -4,7 +4,8 @@ import * as fs from "fs-extra";
 fs.ensureDirSync('dist');
 
 rollupBundle({
-  input: 'src/docs.ts',
-  dest: 'docs/docs/javascript/index.js',
+  input: './src/index.ts',
+  dest: '../dist/index.umd.js',
+  format: 'iife',
   declaration: false,
 });

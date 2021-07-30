@@ -15,19 +15,19 @@ jobs:
           node-version: 14
 
       - name: Install Dependencies
-        run: npm ci
+        run: cd js && npm ci
 
       - name: Compile
-        run: npm run compile
+        run: cd js && npm run compile
 
       - name: Copy files
-        run: cp {package.json,LICENSE,README.md} dist/ && cp {LICENSE,README.md} dist/deno
+        run: cp js/{package.json,LICENSE,README.md} dist/ && cp js/{LICENSE,README.md} dist/deno
 
       - name: Release NPM
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: cd js && npx semantic-release
 
       - uses: denoland/setup-deno@v1
         with:
@@ -55,7 +55,7 @@ jobs:
           node-version: 14
 
       - name: Compile js
-        run: npm ci && npm run compile
+        run: cd js && npm ci && npm run compile
 
       - name: Build Playground
         run: cd demos/maze-playground && npm i && npm run build
