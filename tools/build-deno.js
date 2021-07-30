@@ -19,7 +19,7 @@ function print(source) {
 }
 
 function writeFile(text, i) {
-  let filepath = files[i].replace('./src/', './dist/deno/');
+  let filepath = files[i].replace('./src/', './deno/');
 
   fsExtra.ensureDirSync(path.dirname(filepath));
   fs.writeFileSync(filepath, text, "utf8");

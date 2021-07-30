@@ -21,7 +21,7 @@ jobs:
         run: npm run compile
 
       - name: Copy files
-        run: cp {package.json,LICENSE,README.md} dist/ && cp {LICENSE,README.md} dist/deno
+        run: cp {package.json,LICENSE,README.md} dist/ && cp {LICENSE,README.md} deno
 
       - name: Release NPM
         env:
@@ -34,16 +34,13 @@ jobs:
           deno-version: v1.x
 
       - name: Test Deno
-        run: deno run dist/deno/index.ts
+        run: deno run deno/index.ts
 
-      - name: Push to deno branch
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: deno
-          FOLDER: dist/deno
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "Build: ({sha}) {msg}"
+
+      - uses: EndBug/add-and-commit@v7
+        with:
+          message: "Build: ({sha}) {msg}"
+          add: 'deno'
 
   deploy_docs:
     name: Deploy Docs
