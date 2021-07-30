@@ -6,39 +6,28 @@ on:
       - main
 jobs:
   release_js:
-    name: Compile JS
+    name: Release JS
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+
       - name: Install Dependencies
         run: npm ci
+
       - name: Compile
         run: npm run compile
+
       - name: Copy files
-        run: cp {package.json,LICENSE,README.md} dist/
-      - name: Release
+        run: cp {package.json,LICENSE,README.md} dist/ && cp {LICENSE,README.md} dist/deno
+
+      - name: Release NPM
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
-
-  release_deno:
-    name: Release Deno
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14
-
-      - name: Compile
-        run: npm ci && npm run compile:deno
-
-      - name: Copy extra files
-        run: cp {LICENSE,README.md} dist/deno
 
       - uses: denoland/setup-deno@v1
         with:
