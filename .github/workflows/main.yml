@@ -5,24 +5,85 @@ on:
       - master
       - main
 jobs:
-  deploy:
+  setup:
+    name: Check out
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+  compile_js:
+    name: Compile JS
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: npm ci
-      - run: npm run compile
-      - run: cp {package.json,LICENSE,README.md} dist/
+      - name: Install Dependencies
+        run: npm ci
+      - name: Compile
+        run: npm run compile
+      - name: Copy files
+        run: cp {package.json,LICENSE,README.md} dist/ && cp {LICENSE,README.md} dist/deno
+
+  release_npm:
+    name: Release NPM
+    runs-on: ubuntu-latest
+    needs: compile_js
+    steps:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+
+  release_deno:
+    name: Release Deno
+    runs-on: ubuntu-latest
+    needs: compile_js
+    steps:
+      - name: Copy extra files
+        run: cp {LICENSE,README.md} dist/deno
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Test Deno
+        run: deno run dist/deno/index.ts
+
+      - name: Push to deno branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: deno
+          FOLDER: dist/deno
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build: ({sha}) {msg}"
+
+  build_playground:
+    name: Build Playground
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+          with:
+            node-version: 14
+
+      - name: Build Playground
+        run: cd demos/maze-playground && npm i && npm run build
+
+      - name: Copy files
+        run: cp -r demos/maze-playground/dist site/playground
+
+  deploy_docs:
+    name: Deploy Docs
+    runs-on: ubuntu-latest
+    needs: [compile_js, build_playground]
+    steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: 3.x
-      - run: pip install mkdocs-material mkdocs-macros-plugin
-      - run: mkdir site && cp -r demos/ site/
-      - run: mkdocs gh-deploy --force --dirty
+      - run: pip install -r docs/requirments.txt
+      - run: cd docs && mkdocs gh-deploy --force --dirty
