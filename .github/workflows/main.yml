@@ -66,7 +66,7 @@ jobs:
           node-version: 14
 
       - name: Compile js
-        run: npm ci && npm run compile:docs-script
+        run: npm ci && npm run compile
 
       - name: Build Playground
         run: cd demos/maze-playground && npm i && npm run build
