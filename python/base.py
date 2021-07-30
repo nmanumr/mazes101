@@ -1,5 +1,10 @@
 class Cell:
-
+    """
+    Represents a single cell of the maze
+    
+    @param val: 
+    
+    """
     def __init__(self, val=0b0000_0000):
         self.val = val
 
@@ -52,11 +57,11 @@ class BaseBoard:
         cell2_dir = self.opposing_wall_fn(cell1_dir)
         return self.cells[index1].has_cell_wall(cell1_dir) and self.cells[index2].has_cell_wall(cell2_dir)
 
-    def set_inter_wall_value(self, index1, index2):
+    def set_inter_wall_value(self, index1, index2,cell_value_fn):
         cell1_dir = self.relative_direction_fn(index1, index2)
         cell2_dir = self.opposing_wall_fn(cell1_dir)
 
         if self.cells[index1].is_enabled:
-            self.cell_value_fn(self.cells[index1], cell1_dir)
+            self.cells[index1] = cell_value_fn(self.cells[index1], cell1_dir)
         if self.cells[index2].is_enabled:
-            self.cell_value_fn(self.cells[index2], cell2_dir)
+            self.cells[index2] = cell_value_fn(self.cells[index2], cell2_dir)

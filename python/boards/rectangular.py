@@ -119,4 +119,8 @@ class RectangularBoard(BaseBoard):
         return rows
 
     def remove_inter_wall(self,index1,index2):
-        self.set_inter_wall_value()
+        self.set_inter_wall_value(index1,index2,lambda cell, dir : cell | dir)
+    
+    def set_inter_wall(self,index1,index2):
+        self.set_inter_wall_value(index1,index2,lambda cell, dir : cell & ~dir)
+    
