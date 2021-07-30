@@ -72,7 +72,7 @@ jobs:
         run: cd demos/maze-playground && npm i && npm run build
 
       - name: Copy files
-        run: mkdir -p /docs/site && cp -r demos/maze-playground/dist docs/site/playground
+        run: mkdir -p docs/site && cp -r demos/maze-playground/dist docs/site/playground
 
       - uses: actions/setup-python@v2
         with:
