@@ -5,6 +5,6 @@ fs.ensureDirSync('dist');
 
 rollupBundle({
   input: 'src/docs.ts',
-  dest: 'docs/javascript/index.js',
+  dest: 'docs/docs/javascript/index.js',
   declaration: false,
 });
