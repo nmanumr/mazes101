@@ -197,3 +197,5 @@ public/style.css
 cjs
 umd
 esm
+
+*.pyc
