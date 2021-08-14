@@ -2,7 +2,7 @@
  * This file contains functions for generic maze board.
  *
  * A board is a byte array with each byte representing a single cell as following
- *  - 8th bit (LSB) is disabled status of cell i.e., 0 if cell if enabled
+ *  - 8th bit (MSB) is disabled status of cell i.e., 0 if cell if enabled
  *  - 7-1 bits can be used for passage status i.e., 0 if there is a wall
  * so technically this type of board representation can have 7 walls for each cell
  *
