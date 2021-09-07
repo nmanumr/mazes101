@@ -30,7 +30,7 @@ The project is still under development and therefore contributions are welcomed 
     * [x] Wilson
 - [x] Renderers
     * [x] SVG
-    * [x] Canvas 
+    * [ ] Canvas 
 
 ## Contributions
 If you feel something is missing or something can be done better feel free to open an issue or direct create a PR for that. Following this a basic overview of progress on this project. We can also pickup anything that is not implemented yet.
