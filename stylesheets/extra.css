@@ -1,0 +1,8 @@
+.mono {
+    font-feature-settings: "kern";
+    font-family: var(--md-code-font-family,_),SFMono-Regular,Consolas,Menlo,monospace;
+}
+
+[data-md-color-scheme=slate] {
+    --md-typeset-a-color: #6a7bdc!important;
+}
