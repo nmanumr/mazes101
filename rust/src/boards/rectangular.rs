@@ -1,7 +1,7 @@
-use crate::boards::base::BaseBoard;
-use crate::{boards::base::BaseDirection, cell::Cell};
+use crate::boards::base::{BaseBoard, BaseDirection};
+use crate::cell::Cell;
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub enum Direction {
     TOP    = 0b0001,
     RIGHT  = 0b0010,
@@ -55,6 +55,7 @@ impl RectangularBoard {
         }
     }
 
+    #[allow(dead_code)]
     /// Position from linear index
     fn to_index(&self, pos: Position) -> usize {
         return pos.y * self.size.width + pos.x;
@@ -138,7 +139,12 @@ mod tests {
 
     #[test]
     fn test_direction() {
-        assert_eq!(Cell(1).0, 1);
+        assert_eq!(Direction::LEFT.get_val(), Direction::LEFT as u8);
+
+        assert_eq!(Direction::LEFT.get_opposing_dir() as u8, Direction::RIGHT as u8);
+        assert_eq!(Direction::RIGHT.get_opposing_dir() as u8, Direction::LEFT as u8);
+        assert_eq!(Direction::TOP.get_opposing_dir() as u8, Direction::BOTTOM as u8);
+        assert_eq!(Direction::BOTTOM.get_opposing_dir() as u8, Direction::TOP as u8);
     }
 }
 
